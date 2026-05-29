@@ -1,0 +1,34 @@
+# --- Python / backend ---
+backend/.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.db
+*.sqlite3
+backend/taskflow.db
+
+# --- Node / frontend ---
+node_modules/
+.next/
+out/
+frontend/coverage/
+npm-debug.log*
+yarn-error.log*
+
+# --- Env / secrets ---
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# --- Editor / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Docker ---
+*.pid
