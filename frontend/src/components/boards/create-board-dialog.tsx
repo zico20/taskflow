@@ -16,6 +16,7 @@ import { FieldError, Input, Label, Textarea } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/misc";
 import { cn } from "@/lib/utils";
 import { useCreateBoard } from "@/hooks/use-boards";
+import { useT } from "@/lib/i18n";
 
 const COLORS = [
   "#58A6FF",
@@ -27,7 +28,7 @@ const COLORS = [
 ];
 
 const schema = z.object({
-  name: z.string().min(1, "Board name is required").max(120),
+  name: z.string().min(1, "createBoard.nameRequired").max(120),
   description: z.string().max(2000).optional(),
 });
 type FormValues = z.infer<typeof schema>;
@@ -39,6 +40,7 @@ export function CreateBoardDialog({
   open: boolean;
   onClose: () => void;
 }) {
+  const t = useT();
   const [color, setColor] = useState(COLORS[0]);
   const createBoard = useCreateBoard();
   const {
@@ -59,42 +61,42 @@ export function CreateBoardDialog({
       { ...values, color },
       {
         onSuccess: () => {
-          toast.success("Board created");
+          toast.success(t("createBoard.success"));
           close();
         },
-        onError: () => toast.error("Couldn't create the board"),
+        onError: () => toast.error(t("createBoard.error")),
       },
     );
   };
 
   return (
     <Dialog open={open} onClose={close}>
-      <DialogHeader title="Create board" onClose={close} />
+      <DialogHeader title={t("createBoard.title")} onClose={close} />
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogBody>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name">{t("createBoard.name")}</Label>
               <Input
                 id="name"
-                placeholder="Product Roadmap"
+                placeholder={t("createBoard.namePlaceholder")}
                 className="mt-1"
                 autoFocus
                 {...register("name")}
               />
-              <FieldError message={errors.name?.message} />
+              <FieldError message={errors.name?.message ? t(errors.name.message) : undefined} />
             </div>
             <div>
-              <Label htmlFor="description">Description (optional)</Label>
+              <Label htmlFor="description">{t("createBoard.description")}</Label>
               <Textarea
                 id="description"
-                placeholder="What is this board for?"
+                placeholder={t("createBoard.descriptionPlaceholder")}
                 className="mt-1"
                 {...register("description")}
               />
             </div>
             <div>
-              <Label>Color</Label>
+              <Label>{t("createBoard.color")}</Label>
               <div className="mt-2 flex gap-2">
                 {COLORS.map((c) => (
                   <button
@@ -117,11 +119,11 @@ export function CreateBoardDialog({
         </DialogBody>
         <DialogFooter>
           <Button type="button" variant="ghost" onClick={close}>
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button type="submit" disabled={createBoard.isPending}>
             {createBoard.isPending && <Spinner />}
-            Create board
+            {t("createBoard.submit")}
           </Button>
         </DialogFooter>
       </form>

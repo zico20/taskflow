@@ -5,10 +5,13 @@ import { LayoutGrid, LogOut } from "lucide-react";
 import { useCurrentUser, useLogout } from "@/hooks/use-auth";
 import { Avatar } from "@/components/ui/misc";
 import { Button } from "@/components/ui/button";
+import { LanguageSwitcher } from "@/components/language-switcher";
+import { useT } from "@/lib/i18n";
 
 export function TopBar() {
   const { data: user } = useCurrentUser();
   const logout = useLogout();
+  const t = useT();
 
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-bg/80 backdrop-blur">
@@ -26,10 +29,11 @@ export function TopBar() {
               <Avatar name={user.name} src={user.avatar_url} size={28} />
               <span className="text-sm text-fg-muted">{user.name}</span>
             </div>
+            <LanguageSwitcher />
             <Button
               variant="ghost"
               size="icon"
-              title="Log out"
+              title={t("common.logout")}
               onClick={() => logout.mutate()}
             >
               <LogOut size={16} />

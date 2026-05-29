@@ -10,14 +10,16 @@ import { FieldError, Input, Label } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/misc";
 import { useLogin } from "@/hooks/use-auth";
 import { ApiRequestError } from "@/lib/api";
+import { useT } from "@/lib/i18n";
 
 const schema = z.object({
-  email: z.string().email("Enter a valid email"),
-  password: z.string().min(1, "Password is required"),
+  email: z.string().email("auth.error.invalidEmail"),
+  password: z.string().min(1, "auth.error.passwordRequired"),
 });
 type FormValues = z.infer<typeof schema>;
 
 export default function LoginPage() {
+  const t = useT();
   const login = useLogin();
   const {
     register,
@@ -29,9 +31,7 @@ export default function LoginPage() {
     login.mutate(values, {
       onError: (err) => {
         const msg =
-          err instanceof ApiRequestError
-            ? err.message
-            : "Something went wrong. Try again.";
+          err instanceof ApiRequestError ? err.message : t("auth.error.generic");
         toast.error(msg);
       },
     });
@@ -39,44 +39,48 @@ export default function LoginPage() {
 
   return (
     <div className="rounded-lg border border-border bg-bg-subtle p-6">
-      <h2 className="mb-1 text-base font-semibold text-fg">Welcome back</h2>
-      <p className="mb-5 text-sm text-fg-muted">Log in to your account</p>
+      <h2 className="mb-1 text-base font-semibold text-fg">
+        {t("auth.login.title")}
+      </h2>
+      <p className="mb-5 text-sm text-fg-muted">{t("auth.login.subtitle")}</p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">{t("auth.field.email")}</Label>
           <Input
             id="email"
             type="email"
             autoComplete="email"
-            placeholder="you@example.com"
+            placeholder={t("auth.placeholder.email")}
             className="mt-1"
             {...register("email")}
           />
-          <FieldError message={errors.email?.message} />
+          <FieldError message={errors.email?.message ? t(errors.email.message) : undefined} />
         </div>
         <div>
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password">{t("auth.field.password")}</Label>
           <Input
             id="password"
             type="password"
             autoComplete="current-password"
-            placeholder="••••••••"
+            placeholder={t("auth.placeholder.password")}
             className="mt-1"
             {...register("password")}
           />
-          <FieldError message={errors.password?.message} />
+          <FieldError
+            message={errors.password?.message ? t(errors.password.message) : undefined}
+          />
         </div>
         <Button type="submit" className="w-full" disabled={login.isPending}>
           {login.isPending && <Spinner />}
-          Log in
+          {t("auth.login.submit")}
         </Button>
       </form>
 
       <p className="mt-5 text-center text-sm text-fg-muted">
-        Don&apos;t have an account?{" "}
+        {t("auth.login.noAccount")}{" "}
         <Link href="/signup" className="text-accent hover:text-accent-hover">
-          Sign up
+          {t("auth.login.signupLink")}
         </Link>
       </p>
     </div>

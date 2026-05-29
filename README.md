@@ -40,13 +40,14 @@ Build boards, drag tasks across columns, and collaborate live — changes appear
 | 📝 | **Activity feed** | "Zain moved 'Onboarding' to Done" — last 20 events, updated live |
 | 👤 | **Roles** | Owner / Editor / Viewer permission model enforced on every endpoint |
 | ⌨️ | **Keyboard shortcuts** | `n` new task · `/` focus search · `Esc` close modals |
+| 🌐 | **Bilingual + RTL/LTR** | Full Arabic/English UI with a language switcher on every screen; direction flips live, preference persists, dynamic content (dates, activity feed) localized |
 | 🌙 | **Dark UI** | Tokyo Night aesthetic, mobile-responsive, smooth animations, friendly empty states |
 
 ---
 
 ## 🧱 Tech stack
 
-**Frontend** — Next.js 14 (App Router) · TypeScript (strict) · Tailwind CSS · TanStack Query (server state) · Zustand (UI state) · React Hook Form + Zod · dnd-kit · lucide-react · sonner
+**Frontend** — Next.js 14 (App Router) · TypeScript (strict) · Tailwind CSS (logical properties for RTL) · TanStack Query (server state) · Zustand (UI state) · React Hook Form + Zod · dnd-kit · lucide-react · sonner · lightweight custom i18n (Arabic/English, no extra deps)
 
 **Backend** — FastAPI · SQLAlchemy 2.0 (async) · Alembic · Pydantic v2 · PostgreSQL · native WebSockets · python-jose (JWT) · bcrypt · slowapi (rate limiting) · pytest
 

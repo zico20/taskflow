@@ -8,9 +8,19 @@ import { toast } from "sonner";
 import { Badge } from "@/components/ui/misc";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { useDeleteBoard } from "@/hooks/use-boards";
-import type { BoardSummary } from "@/lib/types";
+import { useLocale, useT, useTCount, dateFnsLocale } from "@/lib/i18n";
+import type { BoardSummary, BoardRole } from "@/lib/types";
+
+const ROLE_KEY: Record<BoardRole, "boards.role.owner" | "boards.role.editor" | "boards.role.viewer"> = {
+  owner: "boards.role.owner",
+  editor: "boards.role.editor",
+  viewer: "boards.role.viewer",
+};
 
 export function BoardCard({ board }: { board: BoardSummary }) {
+  const t = useT();
+  const tc = useTCount();
+  const { locale } = useLocale();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const deleteBoard = useDeleteBoard();
   const isOwner = board.role === "owner";
@@ -18,10 +28,10 @@ export function BoardCard({ board }: { board: BoardSummary }) {
   const handleDelete = () => {
     deleteBoard.mutate(board.id, {
       onSuccess: () => {
-        toast.success("Board deleted");
+        toast.success(t("deleteBoard.success"));
         setConfirmOpen(false);
       },
-      onError: () => toast.error("Couldn't delete the board"),
+      onError: () => toast.error(t("deleteBoard.error")),
     });
   };
 
@@ -36,12 +46,14 @@ export function BoardCard({ board }: { board: BoardSummary }) {
           style={{ backgroundColor: board.color }}
         />
         <div className="flex items-start justify-between gap-2">
-          <h3 className="font-semibold text-fg group-hover:text-accent">
+          <h3 dir="auto" className="font-semibold text-fg group-hover:text-accent">
             {board.name}
           </h3>
           <div className="flex shrink-0 items-center gap-1.5">
             {board.role && (
-              <Badge className="bg-bg-muted text-fg-subtle">{board.role}</Badge>
+              <Badge className="bg-bg-muted text-fg-subtle">
+                {t(ROLE_KEY[board.role])}
+              </Badge>
             )}
             {isOwner && (
               <button
@@ -52,8 +64,8 @@ export function BoardCard({ board }: { board: BoardSummary }) {
                   e.stopPropagation();
                   setConfirmOpen(true);
                 }}
-                title="Delete board"
-                aria-label="Delete board"
+                title={t("deleteBoard.title")}
+                aria-label={t("deleteBoard.title")}
                 className="rounded-md p-1 text-fg-subtle opacity-0 transition-all hover:bg-danger/15 hover:text-danger focus:opacity-100 group-hover:opacity-100"
               >
                 <Trash2 size={15} />
@@ -63,7 +75,7 @@ export function BoardCard({ board }: { board: BoardSummary }) {
         </div>
 
         {board.description && (
-          <p className="mt-1 line-clamp-2 text-sm text-fg-muted">
+          <p dir="auto" className="mt-1 line-clamp-2 text-sm text-fg-muted">
             {board.description}
           </p>
         )}
@@ -71,11 +83,12 @@ export function BoardCard({ board }: { board: BoardSummary }) {
         <div className="mt-4 flex items-center justify-between text-xs text-fg-subtle">
           <span className="inline-flex items-center gap-1">
             <ListChecks size={13} />
-            {board.task_count} task{board.task_count === 1 ? "" : "s"}
+            {tc("boards.card.tasks", board.task_count)}
           </span>
           <span>
             {formatDistanceToNow(new Date(board.updated_at), {
               addSuffix: true,
+              locale: dateFnsLocale(locale),
             })}
           </span>
         </div>
@@ -83,9 +96,9 @@ export function BoardCard({ board }: { board: BoardSummary }) {
 
       <ConfirmDialog
         open={confirmOpen}
-        title="Delete board"
-        message={`Delete "${board.name}"? This permanently removes all its columns, tasks, and activity. This cannot be undone.`}
-        confirmLabel="Delete board"
+        title={t("deleteBoard.title")}
+        message={t("deleteBoard.message", { name: board.name })}
+        confirmLabel={t("deleteBoard.confirm")}
         destructive
         loading={deleteBoard.isPending}
         onConfirm={handleDelete}

@@ -6,6 +6,8 @@ import { Calendar } from "lucide-react";
 import { format, isPast, isToday } from "date-fns";
 import { Badge } from "@/components/ui/misc";
 import { cn } from "@/lib/utils";
+import { useT, useLocale, dateFnsLocale } from "@/lib/i18n";
+import type { MessageKey } from "@/lib/i18n";
 import type { Priority, Task } from "@/lib/types";
 
 const PRIORITY_COLOR: Record<Priority, string> = {
@@ -14,7 +16,15 @@ const PRIORITY_COLOR: Record<Priority, string> = {
   high: "#F85149",
 };
 
+const PRIORITY_KEY: Record<Priority, MessageKey> = {
+  low: "priority.low",
+  medium: "priority.medium",
+  high: "priority.high",
+};
+
 export function TaskCardContent({ task }: { task: Task }) {
+  const t = useT();
+  const { locale } = useLocale();
   const due = task.due_date ? new Date(task.due_date) : null;
   const overdue = due ? isPast(due) && !isToday(due) : false;
 
@@ -32,9 +42,13 @@ export function TaskCardContent({ task }: { task: Task }) {
           ))}
         </div>
       )}
-      <p className="text-sm font-medium leading-snug text-fg">{task.title}</p>
+      <p dir="auto" className="text-sm font-medium leading-snug text-fg">
+        {task.title}
+      </p>
       <div className="mt-2.5 flex items-center justify-between">
-        <Badge color={PRIORITY_COLOR[task.priority]}>{task.priority}</Badge>
+        <Badge color={PRIORITY_COLOR[task.priority]}>
+          {t(PRIORITY_KEY[task.priority])}
+        </Badge>
         {due && (
           <span
             className={cn(
@@ -43,7 +57,7 @@ export function TaskCardContent({ task }: { task: Task }) {
             )}
           >
             <Calendar size={11} />
-            {format(due, "MMM d")}
+            {format(due, "MMM d", { locale: dateFnsLocale(locale) })}
           </span>
         )}
       </div>
