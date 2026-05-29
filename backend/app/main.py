@@ -56,6 +56,28 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
+    # Dev safety net (SQLite only): if the local .db file gets deleted while the
+    # server is running, recreate the tables on the next request instead of
+    # failing every call with "no such table". No-op in production (Postgres).
+    if settings.is_sqlite:
+
+        @app.middleware("http")
+        async def _ensure_sqlite_tables(request, call_next):
+            from sqlalchemy import inspect
+
+            import app.models  # noqa: F401
+            from app.db.base import Base
+            from app.db.session import engine
+
+            async with engine.begin() as conn:
+                has_users = await conn.run_sync(
+                    lambda sync_conn: inspect(sync_conn).has_table("users")
+                )
+                if not has_users:
+                    await conn.run_sync(Base.metadata.create_all)
+                    logger.warning("SQLite tables were missing — recreated them.")
+            return await call_next(request)
+
     register_exception_handlers(app)
 
     app.include_router(api_router, prefix=settings.API_V1_PREFIX)
