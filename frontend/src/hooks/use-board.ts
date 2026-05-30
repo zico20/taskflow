@@ -192,5 +192,18 @@ export function useCreateLabel(boardId: number) {
   });
 }
 
+export function useDeleteLabel(boardId: number) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (labelId: number) => labelsApi.remove(boardId, labelId),
+    onSuccess: () => {
+      // The label list shrinks, and its chips were removed from tasks server-side
+      // (FK cascade) — refetch the snapshot so those chips disappear locally too.
+      qc.invalidateQueries({ queryKey: labelsKey(boardId) });
+      qc.invalidateQueries({ queryKey: snapshotKey(boardId) });
+    },
+  });
+}
+
 export { updateSnapshot };
 export type { Task };

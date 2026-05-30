@@ -16,6 +16,8 @@ const ACTION_KEY: Record<string, MessageKey> = {
   "member.added": "activity.member.added",
   "member.role_changed": "activity.member.role_changed",
   "member.removed": "activity.member.removed",
+  "label.created": "activity.label.created",
+  "label.deleted": "activity.label.deleted",
 };
 
 /**

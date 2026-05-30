@@ -186,6 +186,8 @@ export const en = {
   "task.dueDate": "Due date",
   "task.priority": "Priority",
   "task.labels": "Labels",
+  "task.noLabels": "No labels yet.",
+  "task.manageLabels": "Manage labels",
   "task.delete": "Delete task",
   "task.create": "Create task",
   "task.created": "Task created",
@@ -196,6 +198,23 @@ export const en = {
   "priority.low": "Low",
   "priority.medium": "Medium",
   "priority.high": "High",
+
+  // --- Labels management ---
+  "labels.title": "Manage labels",
+  "labels.create": "Create label",
+  "labels.namePlaceholder": "Label name",
+  "labels.color": "Color",
+  "labels.existing": "Labels",
+  "labels.empty": "No labels yet. Create one above.",
+  "labels.created": "Label created",
+  "labels.nameTaken": "A label with that name already exists",
+  "labels.createError": "Couldn't create the label",
+  "labels.delete": "Delete label",
+  "labels.deleteConfirmTitle": "Delete label?",
+  "labels.deleteConfirm":
+    "Delete '{name}'? It will be removed from every task it's applied to.",
+  "labels.deleted": "Label deleted",
+  "labels.deleteError": "Couldn't delete the label",
 
   // --- Activity feed ---
   "activity.title": "Activity",
@@ -216,6 +235,8 @@ export const en = {
   "activity.member.added": "{user} added {member}",
   "activity.member.role_changed": "{user} changed {member}'s role to {role}",
   "activity.member.removed": "{user} removed {member}",
+  "activity.label.created": "{user} added label '{name}'",
+  "activity.label.deleted": "{user} deleted label '{name}'",
 
   // --- Demo ---
   "demo.signupToSave": "Sign up to save your work",
@@ -417,6 +438,8 @@ export const ar: Dictionary = {
   "task.dueDate": "تاريخ الاستحقاق",
   "task.priority": "الأولوية",
   "task.labels": "التصنيفات",
+  "task.noLabels": "لا توجد تصنيفات بعد.",
+  "task.manageLabels": "إدارة التصنيفات",
   "task.delete": "حذف المهمة",
   "task.create": "إنشاء مهمة",
   "task.created": "تم إنشاء المهمة",
@@ -427,6 +450,22 @@ export const ar: Dictionary = {
   "priority.low": "منخفضة",
   "priority.medium": "متوسطة",
   "priority.high": "عالية",
+
+  // --- Labels management ---
+  "labels.title": "إدارة التصنيفات",
+  "labels.create": "إنشاء تصنيف",
+  "labels.namePlaceholder": "اسم التصنيف",
+  "labels.color": "اللون",
+  "labels.existing": "التصنيفات",
+  "labels.empty": "لا توجد تصنيفات بعد. أنشئ واحداً بالأعلى.",
+  "labels.created": "تم إنشاء التصنيف",
+  "labels.nameTaken": "يوجد تصنيف بهذا الاسم بالفعل",
+  "labels.createError": "تعذّر إنشاء التصنيف",
+  "labels.delete": "حذف التصنيف",
+  "labels.deleteConfirmTitle": "حذف التصنيف؟",
+  "labels.deleteConfirm": "حذف '{name}'؟ سيُزال من كل المهام المطبَّق عليها.",
+  "labels.deleted": "تم حذف التصنيف",
+  "labels.deleteError": "تعذّر حذف التصنيف",
 
   // --- Activity feed ---
   "activity.title": "النشاط",
@@ -446,6 +485,8 @@ export const ar: Dictionary = {
   "activity.member.added": "أضاف {user} العضو {member}",
   "activity.member.role_changed": "غيّر {user} صلاحية {member} إلى {role}",
   "activity.member.removed": "أزال {user} العضو {member}",
+  "activity.label.created": "أضاف {user} التصنيف '{name}'",
+  "activity.label.deleted": "حذف {user} التصنيف '{name}'",
 
   // --- Demo ---
   "demo.signupToSave": "سجّل لحفظ شغلك",

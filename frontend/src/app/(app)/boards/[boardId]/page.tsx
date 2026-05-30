@@ -10,6 +10,7 @@ import {
   Plus,
   Search,
   Settings,
+  Tags,
   PanelRightClose,
   PanelRightOpen,
 } from "lucide-react";
@@ -22,6 +23,7 @@ import { AddColumnDialog } from "@/components/kanban/add-column-dialog";
 import { ActivityFeed } from "@/components/kanban/activity-feed";
 import { PresenceBar } from "@/components/kanban/presence-bar";
 import { BoardSettingsDialog } from "@/components/boards/board-settings-dialog";
+import { ManageLabelsDialog } from "@/components/kanban/manage-labels-dialog";
 import {
   useBoardDetail,
   useBoardSnapshot,
@@ -72,6 +74,7 @@ export default function BoardPage() {
   } | null>(null);
   const [addColumnOpen, setAddColumnOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [labelsOpen, setLabelsOpen] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
 
   useKeyboardShortcuts({
@@ -160,6 +163,16 @@ export default function BoardPage() {
             />
           </div>
           <PresenceBar viewers={viewers} connected={connected} />
+          {canEdit && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setLabelsOpen(true)}
+              title={t("labels.title")}
+            >
+              <Tags size={16} />
+            </Button>
+          )}
           {isOwner && (
             <Button
               variant="ghost"
@@ -247,6 +260,13 @@ export default function BoardPage() {
           board={board}
           open={settingsOpen}
           onClose={() => setSettingsOpen(false)}
+        />
+      )}
+      {canEdit && (
+        <ManageLabelsDialog
+          boardId={boardId}
+          open={labelsOpen}
+          onClose={() => setLabelsOpen(false)}
         />
       )}
     </div>

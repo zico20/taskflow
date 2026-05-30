@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.label import Label
@@ -8,6 +8,19 @@ from app.models.label import Label
 
 async def get_by_id(db: AsyncSession, label_id: int) -> Label | None:
     return await db.get(Label, label_id)
+
+
+async def get_by_name_ci(
+    db: AsyncSession, *, board_id: int, name: str
+) -> Label | None:
+    """Find a label on a board by name, case-insensitively (for uniqueness)."""
+    result = await db.execute(
+        select(Label).where(
+            Label.board_id == board_id,
+            func.lower(Label.name) == name.strip().lower(),
+        )
+    )
+    return result.scalars().first()
 
 
 async def list_for_board(db: AsyncSession, board_id: int) -> list[Label]:

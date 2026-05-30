@@ -204,9 +204,14 @@ export function TaskDialog({
               </div>
             </div>
 
-            {labels.length > 0 && (
-              <div>
-                <Label>{t("task.labels")}</Label>
+            <div>
+              <Label>{t("task.labels")}</Label>
+              {labels.length === 0 ? (
+                <p className="mt-1 text-xs text-fg-subtle">
+                  {t("task.noLabels")}{" "}
+                  <span className="text-fg-muted">{t("task.manageLabels")}</span>
+                </p>
+              ) : (
                 <div className="mt-2 flex flex-wrap gap-2">
                   {labels.map((l) => {
                     const active = selectedLabels.includes(l.id);
@@ -230,8 +235,8 @@ export function TaskDialog({
                     );
                   })}
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </DialogBody>
         <DialogFooter>

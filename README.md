@@ -34,6 +34,7 @@ Build boards, drag tasks across columns, and collaborate live — changes appear
 | 🗂️ | **Boards** | Unlimited boards with name, description, color theme, last-activity timestamp |
 | 📋 | **Kanban columns** | Default *To Do / In Progress / Done*; add, rename, delete, and reorder custom columns |
 | 🃏 | **Tasks** | Title, markdown description, due date, priority (Low/Med/High), color labels; edit in a drawer-style modal |
+| 🏷️ | **Labels** | Create named, colored labels per board and apply/remove them on tasks from the UI; delete cascades chips off every task — all live across viewers |
 | 🖱️ | **Drag & drop** | Powered by **dnd-kit** — reorder within a column and move across columns with **optimistic UI** |
 | ⚡ | **Real-time** | WebSocket per board — another user's move appears instantly, no refresh |
 | 👥 | **Presence** | Live avatars of everyone currently viewing the board |

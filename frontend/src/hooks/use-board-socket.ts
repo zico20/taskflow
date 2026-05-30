@@ -12,7 +12,7 @@ import type {
   Task,
   WsMessage,
 } from "@/lib/types";
-import { boardKey, snapshotKey } from "./use-board";
+import { boardKey, labelsKey, snapshotKey } from "./use-board";
 
 interface UseBoardSocketResult {
   connected: boolean;
@@ -155,6 +155,17 @@ export function useBoardSocket(
           qc.setQueryData<BoardDetail>(boardKey(boardId), (prev) =>
             prev ? { ...prev, ...msg.data } : prev,
           );
+          break;
+        case "label.created":
+          if (isSelf) break;
+          qc.invalidateQueries({ queryKey: labelsKey(boardId) });
+          break;
+        case "label.deleted":
+          if (isSelf) break;
+          // A deleted label is removed from its tasks server-side (cascade), so
+          // refetch both the label list and the snapshot to clear its chips.
+          qc.invalidateQueries({ queryKey: labelsKey(boardId) });
+          qc.invalidateQueries({ queryKey: snapshotKey(boardId) });
           break;
         default:
           break;

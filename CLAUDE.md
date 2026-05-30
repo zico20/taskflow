@@ -1,5 +1,5 @@
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan:
-`specs/002-board-members-management/plan.md`
+`specs/003-labels-management/plan.md`
 <!-- SPECKIT END -->
