@@ -2,6 +2,8 @@ import { apiFetch } from "./api";
 import type {
   ActivityEntry,
   BoardDetail,
+  BoardMember,
+  BoardRole,
   BoardSnapshot,
   BoardSummary,
   Column,
@@ -10,6 +12,8 @@ import type {
   Task,
   User,
 } from "./types";
+
+type ManageableRole = Extract<BoardRole, "editor" | "viewer">;
 
 // --- Auth ---
 export const authApi = {
@@ -43,11 +47,18 @@ export const boardsApi = {
   ) => apiFetch<BoardSummary>(`/boards/${id}`, { method: "PATCH", body: data }),
   remove: (id: number) =>
     apiFetch<void>(`/boards/${id}`, { method: "DELETE" }),
-  addMember: (id: number, email: string, role: string) =>
-    apiFetch(`/boards/${id}/members`, {
+  addMember: (id: number, email: string, role: ManageableRole) =>
+    apiFetch<BoardMember>(`/boards/${id}/members`, {
       method: "POST",
       body: { email, role },
     }),
+  updateMemberRole: (id: number, userId: number, role: ManageableRole) =>
+    apiFetch<BoardMember>(`/boards/${id}/members/${userId}`, {
+      method: "PATCH",
+      body: { role },
+    }),
+  removeMember: (id: number, userId: number) =>
+    apiFetch<void>(`/boards/${id}/members/${userId}`, { method: "DELETE" }),
 };
 
 // --- Columns ---

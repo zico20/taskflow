@@ -77,6 +77,32 @@ async def add_member(
     return member
 
 
+async def get_member(
+    db: AsyncSession, *, board_id: int, user_id: int
+) -> BoardMember | None:
+    result = await db.execute(
+        select(BoardMember)
+        .where(BoardMember.board_id == board_id, BoardMember.user_id == user_id)
+        .options(selectinload(BoardMember.user))
+    )
+    return result.scalar_one_or_none()
+
+
+async def update_member_role(
+    db: AsyncSession, *, member: BoardMember, role: BoardRole
+) -> BoardMember:
+    member.role = role
+    db.add(member)
+    await db.flush()
+    await db.refresh(member, attribute_names=["user"])
+    return member
+
+
+async def remove_member(db: AsyncSession, *, member: BoardMember) -> None:
+    await db.delete(member)
+    await db.flush()
+
+
 async def delete(db: AsyncSession, board: Board) -> None:
     await db.delete(board)
     await db.flush()

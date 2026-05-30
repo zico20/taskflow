@@ -38,7 +38,7 @@ Build boards, drag tasks across columns, and collaborate live — changes appear
 | ⚡ | **Real-time** | WebSocket per board — another user's move appears instantly, no refresh |
 | 👥 | **Presence** | Live avatars of everyone currently viewing the board |
 | 📝 | **Activity feed** | "Zain moved 'Onboarding' to Done" — last 20 events, updated live |
-| 👤 | **Roles** | Owner / Editor / Viewer permission model enforced on every endpoint |
+| 👤 | **Roles & sharing** | Owner / Editor / Viewer model; owners invite members by email, change roles, and remove members from a Board Settings panel — owner protected, enforced server-side |
 | ⌨️ | **Keyboard shortcuts** | `n` new task · `/` focus search · `Esc` close modals |
 | 🌐 | **Bilingual + RTL/LTR** | Full Arabic/English UI with a language switcher on every screen; direction flips live, preference persists, dynamic content (dates, activity feed) localized |
 | 🌙 | **Dark UI** | Tokyo Night aesthetic, mobile-responsive, smooth animations, friendly empty states |

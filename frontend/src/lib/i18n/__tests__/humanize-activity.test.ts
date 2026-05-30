@@ -27,6 +27,23 @@ describe("humanizeActivity", () => {
     ).toBe("Owner added Lina");
   });
 
+  it("builds member.role_changed with a localized role word", () => {
+    expect(
+      humanizeActivity(
+        "member.role_changed",
+        "Owner",
+        { member_name: "Lina", role: "viewer" },
+        tEn,
+      ),
+    ).toBe("Owner changed Lina's role to viewer");
+  });
+
+  it("builds member.removed", () => {
+    expect(
+      humanizeActivity("member.removed", "Owner", { member_name: "Lina" }, tEn),
+    ).toBe("Owner removed Lina");
+  });
+
   it("covers every known action type without leaving raw tokens", () => {
     const actions = [
       "task.created",
@@ -40,6 +57,8 @@ describe("humanizeActivity", () => {
       "board.created",
       "board.updated",
       "member.added",
+      "member.role_changed",
+      "member.removed",
     ];
     for (const a of actions) {
       const out = humanizeActivity(

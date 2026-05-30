@@ -14,6 +14,8 @@ const ACTION_KEY: Record<string, MessageKey> = {
   "board.created": "activity.board.created",
   "board.updated": "activity.board.updated",
   "member.added": "activity.member.added",
+  "member.role_changed": "activity.member.role_changed",
+  "member.removed": "activity.member.removed",
 };
 
 /**
@@ -35,6 +37,9 @@ export function humanizeActivity(
   const name = String(payload.name ?? "");
   const column = String(payload.to_column ?? "");
   const member = String(payload.member_name ?? "");
+  // For member.role_changed, localize the role word via the role badge keys.
+  const rawRole = payload.role ? String(payload.role) : "";
+  const role = rawRole ? t(`boards.role.${rawRole}`) : "";
 
-  return t(key, { user: userName, title, name, column, member });
+  return t(key, { user: userName, title, name, column, member, role });
 }

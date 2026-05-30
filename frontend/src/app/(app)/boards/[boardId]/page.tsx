@@ -9,6 +9,7 @@ import {
   ListTodo,
   Plus,
   Search,
+  Settings,
   PanelRightClose,
   PanelRightOpen,
 } from "lucide-react";
@@ -20,6 +21,7 @@ import { TaskDialog } from "@/components/kanban/task-dialog";
 import { AddColumnDialog } from "@/components/kanban/add-column-dialog";
 import { ActivityFeed } from "@/components/kanban/activity-feed";
 import { PresenceBar } from "@/components/kanban/presence-bar";
+import { BoardSettingsDialog } from "@/components/boards/board-settings-dialog";
 import {
   useBoardDetail,
   useBoardSnapshot,
@@ -56,6 +58,7 @@ export default function BoardPage() {
   );
 
   const canEdit = board?.role === "owner" || board?.role === "editor";
+  const isOwner = board?.role === "owner";
 
   // Client UI state (Zustand) — activity panel visibility, persisted locally.
   const activityPanelOpen = useUiStore((s) => s.activityPanelOpen);
@@ -68,6 +71,7 @@ export default function BoardPage() {
     task?: Task | null;
   } | null>(null);
   const [addColumnOpen, setAddColumnOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
 
   useKeyboardShortcuts({
@@ -156,6 +160,16 @@ export default function BoardPage() {
             />
           </div>
           <PresenceBar viewers={viewers} connected={connected} />
+          {isOwner && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setSettingsOpen(true)}
+              title={t("board.settings")}
+            >
+              <Settings size={16} />
+            </Button>
+          )}
           <Button
             variant="ghost"
             size="icon"
@@ -228,6 +242,13 @@ export default function BoardPage() {
         open={addColumnOpen}
         onClose={() => setAddColumnOpen(false)}
       />
+      {isOwner && (
+        <BoardSettingsDialog
+          board={board}
+          open={settingsOpen}
+          onClose={() => setSettingsOpen(false)}
+        />
+      )}
     </div>
   );
 }

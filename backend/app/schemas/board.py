@@ -32,6 +32,12 @@ class BoardMemberAdd(BaseModel):
     role: BoardRole = BoardRole.editor
 
 
+class MemberRoleUpdate(BaseModel):
+    """Change an existing member's role. Owner is not assignable here."""
+
+    role: BoardRole
+
+
 class BoardSummary(BaseModel):
     """Board card data for the list view."""
 

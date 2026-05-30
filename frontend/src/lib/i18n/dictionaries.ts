@@ -132,6 +132,33 @@ export const en = {
   "board.empty.desc": "Add a column to start tracking tasks.",
   "board.activity.toggleShow": "Show activity",
   "board.activity.toggleHide": "Hide activity",
+  "board.settings": "Board settings",
+
+  // --- Board settings dialog ---
+  "settings.title": "Board settings",
+  "settings.tab.details": "Details",
+  "settings.tab.members": "Members",
+  "settings.details.save": "Save changes",
+  "settings.details.saved": "Board updated",
+  "settings.details.error": "Couldn't update the board",
+  "settings.members.heading": "Members",
+  "settings.members.invitePlaceholder": "teammate@email.com",
+  "settings.members.invite": "Invite",
+  "settings.members.inviteHint": "Invite a registered user by email.",
+  "settings.members.you": "You",
+  "settings.members.owner": "Owner",
+  "settings.members.remove": "Remove",
+  "settings.members.removeConfirmTitle": "Remove member",
+  "settings.members.removeConfirm":
+    "Remove {name} from this board? They will lose access immediately.",
+  "settings.invite.success": "{name} added",
+  "settings.invite.alreadyMember": "That user is already a member.",
+  "settings.invite.notFound": "No user found for that email.",
+  "settings.invite.error": "Couldn't add the member.",
+  "settings.role.changed": "Role updated",
+  "settings.role.error": "Couldn't change the role.",
+  "settings.member.removed": "Member removed",
+  "settings.member.removeError": "Couldn't remove the member.",
 
   // --- Column ---
   "column.addTask": "Add task",
@@ -187,6 +214,8 @@ export const en = {
   "activity.board.created": "{user} created board '{name}'",
   "activity.board.updated": "{user} updated board '{name}'",
   "activity.member.added": "{user} added {member}",
+  "activity.member.role_changed": "{user} changed {member}'s role to {role}",
+  "activity.member.removed": "{user} removed {member}",
 
   // --- Demo ---
   "demo.signupToSave": "Sign up to save your work",
@@ -334,6 +363,33 @@ export const ar: Dictionary = {
   "board.empty.desc": "أضف عموداً لتبدأ بتتبّع المهام.",
   "board.activity.toggleShow": "إظهار النشاط",
   "board.activity.toggleHide": "إخفاء النشاط",
+  "board.settings": "إعدادات اللوحة",
+
+  // --- Board settings dialog ---
+  "settings.title": "إعدادات اللوحة",
+  "settings.tab.details": "التفاصيل",
+  "settings.tab.members": "الأعضاء",
+  "settings.details.save": "حفظ التغييرات",
+  "settings.details.saved": "تم تحديث اللوحة",
+  "settings.details.error": "تعذّر تحديث اللوحة",
+  "settings.members.heading": "الأعضاء",
+  "settings.members.invitePlaceholder": "teammate@email.com",
+  "settings.members.invite": "دعوة",
+  "settings.members.inviteHint": "ادعُ مستخدماً مسجّلاً عن طريق بريده الإلكتروني.",
+  "settings.members.you": "أنت",
+  "settings.members.owner": "المالك",
+  "settings.members.remove": "إزالة",
+  "settings.members.removeConfirmTitle": "إزالة عضو",
+  "settings.members.removeConfirm":
+    "إزالة {name} من هذه اللوحة؟ سيفقد الوصول فوراً.",
+  "settings.invite.success": "تمت إضافة {name}",
+  "settings.invite.alreadyMember": "هذا المستخدم عضو بالفعل.",
+  "settings.invite.notFound": "لا يوجد مستخدم بهذا البريد الإلكتروني.",
+  "settings.invite.error": "تعذّر إضافة العضو.",
+  "settings.role.changed": "تم تحديث الصلاحية",
+  "settings.role.error": "تعذّر تغيير الصلاحية.",
+  "settings.member.removed": "تمت إزالة العضو",
+  "settings.member.removeError": "تعذّر إزالة العضو.",
 
   // --- Column ---
   "column.addTask": "إضافة مهمة",
@@ -388,6 +444,8 @@ export const ar: Dictionary = {
   "activity.board.created": "أنشأ {user} اللوحة '{name}'",
   "activity.board.updated": "حدّث {user} اللوحة '{name}'",
   "activity.member.added": "أضاف {user} العضو {member}",
+  "activity.member.role_changed": "غيّر {user} صلاحية {member} إلى {role}",
+  "activity.member.removed": "أزال {user} العضو {member}",
 
   // --- Demo ---
   "demo.signupToSave": "سجّل لحفظ شغلك",
