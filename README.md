@@ -43,7 +43,8 @@ Build boards, drag tasks across columns, and collaborate live — changes appear
 | ⌨️ | **Keyboard shortcuts** | `n` new task · `/` focus search · `Esc` close modals |
 | 🌐 | **Bilingual + RTL/LTR** | Full Arabic/English UI with a language switcher on every screen; direction flips live, preference persists, dynamic content (dates, activity feed) localized |
 | 🪟 | **Liquid Glass design** | Translucent, luminous *floating* chrome (sidebar, dialogs, menus, pills) over solid, readable work surfaces, with a brand aurora backdrop; one token set drives the whole system |
-| 🧭 | **Sidebar navigation** | A persistent sidebar (brand, "All boards", a quick-switch board list, and user/theme/language/logout) replaces the top bar; collapses to an icon rail on narrow screens and mirrors to the right in Arabic. Boards are grouped by role (owned / shared-can-edit / shared-view-only); activity opens in a slide-over drawer |
+| 🧭 | **Sidebar navigation** | A persistent sidebar (brand, "All boards", a quick-switch board list, and user/theme/language/logout) replaces the top bar; on phones (<768px) it becomes an accessible hamburger drawer, and it mirrors to the right in Arabic. Boards are grouped by role (owned / shared-can-edit / shared-view-only); activity opens in a slide-over drawer |
+| 📱 | **Fully responsive** | Works across phones, tablets, and desktop: fluid single/multi-column layouts, no horizontal page scroll, comfortable touch targets, 16px form inputs (no iOS zoom), and `@media (hover: hover)` / reduced-motion guards. The desktop layout (≥1280px) is unchanged |
 | 🌗 | **Light & Dark themes** | A theme toggle in the sidebar (and on auth screens) switches the whole UI instantly, persists per device, and applies before first paint (no flash); Dark by default |
 | 🌙 | **Polished UI** | Mobile-responsive, smooth animations, friendly empty states; honors `prefers-reduced-transparency` (glass → solid) and `prefers-reduced-motion` |
 

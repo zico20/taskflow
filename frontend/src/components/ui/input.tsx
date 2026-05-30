@@ -8,7 +8,10 @@ export const Input = React.forwardRef<
   <input
     ref={ref}
     className={cn(
-      "flex h-9 w-full rounded-md border border-border bg-bg-subtle px-3 py-1 text-sm text-fg",
+      // 16px (text-base) on mobile prevents iOS zoom-on-focus; revert to the
+      // desktop sizing at md+. Slightly taller on mobile for a comfortable target.
+      "flex h-10 w-full rounded-md border border-border bg-bg-subtle px-3 py-1 text-base text-fg",
+      "md:h-9 md:text-sm",
       "placeholder:text-fg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60",
       "disabled:cursor-not-allowed disabled:opacity-50",
       className,
@@ -25,7 +28,8 @@ export const Textarea = React.forwardRef<
   <textarea
     ref={ref}
     className={cn(
-      "flex min-h-[80px] w-full rounded-md border border-border bg-bg-subtle px-3 py-2 text-sm text-fg",
+      // 16px on mobile (no iOS zoom); desktop sizing at md+.
+      "flex min-h-[80px] w-full rounded-md border border-border bg-bg-subtle px-3 py-2 text-base text-fg md:text-sm",
       "placeholder:text-fg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60",
       "disabled:cursor-not-allowed disabled:opacity-50 resize-y",
       className,

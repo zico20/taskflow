@@ -123,22 +123,25 @@ export default function BoardPage() {
   return (
     <>
       {/* Context header */}
-      <header className="flex h-[60px] flex-shrink-0 items-center gap-3.5 border-b border-border/60 px-6">
-        <nav className="flex items-center gap-2 text-[12.5px] text-fg-subtle">
+      <header className="flex h-[60px] flex-shrink-0 items-center gap-2.5 border-b border-border/60 px-4 sm:gap-3.5 sm:px-6">
+        <nav className="flex items-center gap-2 text-[12.5px] text-fg-subtle max-sm:hidden">
           <Link href="/boards" className="transition-colors hover:text-fg">
             {t("nav.boards")}
           </Link>
           <ChevronRight size={13} className="rtl:rotate-180" />
         </nav>
         <span
-          className="h-2.5 w-2.5 rounded-[3px]"
+          className="h-2.5 w-2.5 shrink-0 rounded-[3px]"
           style={{ backgroundColor: board.color }}
         />
-        <h1 dir="auto" className="text-[17px] font-bold tracking-tight text-fg">
+        <h1
+          dir="auto"
+          className="min-w-0 truncate text-[17px] font-bold tracking-tight text-fg"
+        >
           {board.name}
         </h1>
 
-        <div className="flex flex-1 items-center justify-end gap-1">
+        <div className="flex flex-1 items-center justify-end gap-0.5 sm:gap-1">
           {canEdit && (
             <Button
               variant="ghost"
@@ -175,8 +178,8 @@ export default function BoardPage() {
       </header>
 
       {/* Toolbar row: search + presence */}
-      <div className="flex flex-shrink-0 items-center gap-3 px-6 pt-5">
-        <div className="relative">
+      <div className="flex flex-shrink-0 items-center gap-3 px-4 pt-4 sm:px-6 sm:pt-5">
+        <div className="relative min-w-0 flex-1 sm:flex-none">
           <Search
             size={14}
             className="pointer-events-none absolute start-2.5 top-1/2 -translate-y-1/2 text-fg-subtle"
@@ -186,15 +189,15 @@ export default function BoardPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={t("board.search")}
-            className="h-9 w-56 ps-8"
+            className="w-full ps-8 sm:w-56"
           />
         </div>
-        <div className="flex-1" />
+        <div className="hidden flex-1 sm:block" />
         <PresenceBar viewers={viewers} connected={connected} />
       </div>
 
       {/* Kanban surface (full width) */}
-      <div className="min-h-0 flex-1 overflow-hidden px-6 py-5">
+      <div className="min-h-0 flex-1 overflow-hidden px-4 py-4 sm:px-6 sm:py-5">
         {!hasColumns ? (
           <EmptyState
             icon={<ListTodo size={22} />}

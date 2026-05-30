@@ -114,6 +114,8 @@ export const en = {
   "boards.group.viewer": "Shared · view only",
   "nav.allBoards": "All boards",
   "nav.boards": "Boards",
+  "nav.openMenu": "Open menu",
+  "nav.closeMenu": "Close menu",
 
   // --- Create board dialog ---
   "createBoard.title": "Create board",
@@ -381,6 +383,8 @@ export const ar: Dictionary = {
   "boards.group.viewer": "مشتركة · مشاهدة",
   "nav.allBoards": "كل اللوحات",
   "nav.boards": "اللوحات",
+  "nav.openMenu": "فتح القائمة",
+  "nav.closeMenu": "إغلاق القائمة",
 
   // --- Create board dialog ---
   "createBoard.title": "إنشاء لوحة",

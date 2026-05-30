@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { cookies } from "next/headers";
 import { Inter, IBM_Plex_Sans_Arabic } from "next/font/google";
 import { Providers } from "@/components/providers";
@@ -17,6 +17,12 @@ const arabic = IBM_Plex_Sans_Arabic({
   weight: ["400", "500", "600", "700"],
   variable: "--font-arabic",
 });
+
+// Mobile viewport: render at device width with no forced zoom (responsive support).
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = normalizeLocale(cookies().get(LOCALE_COOKIE)?.value);

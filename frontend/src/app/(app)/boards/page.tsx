@@ -39,11 +39,11 @@ export default function BoardsPage() {
   return (
     <>
       {/* Context header */}
-      <header className="flex h-[60px] flex-shrink-0 items-center gap-3.5 border-b border-border/60 px-6">
+      <header className="flex h-[60px] flex-shrink-0 items-center gap-3 border-b border-border/60 px-4 sm:gap-3.5 sm:px-6">
         <h1 className="text-[17px] font-bold tracking-tight text-fg">
           {t("nav.allBoards")}
         </h1>
-        <span className="text-[12.5px] text-fg-subtle">
+        <span className="hidden text-[12.5px] text-fg-subtle sm:inline">
           {tc("boards.count", boards?.length ?? 0)}
         </span>
         <div className="flex-1" />
@@ -53,7 +53,7 @@ export default function BoardsPage() {
         </Button>
       </header>
 
-      <div className="flex-1 overflow-y-auto px-6 py-6">
+      <div className="flex-1 overflow-y-auto px-4 py-5 sm:px-6 sm:py-6">
         {isLoading ? (
           <div className="flex justify-center py-20">
             <Spinner className="h-6 w-6 text-accent" />

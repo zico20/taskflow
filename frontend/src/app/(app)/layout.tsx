@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCurrentUser } from "@/hooks/use-auth";
 import { FullPageSpinner } from "@/components/ui/misc";
 import { Sidebar } from "@/components/sidebar";
+import { MobileNav } from "@/components/mobile-nav";
 import { Backdrop } from "@/components/backdrop";
 
 /**
@@ -33,9 +34,13 @@ export default function AppLayout({
     <div className="relative flex h-screen overflow-hidden">
       <Backdrop />
       <Sidebar />
-      <main className="relative z-10 flex min-w-0 flex-1 flex-col overflow-hidden">
-        {children}
-      </main>
+      <div className="relative z-10 flex min-w-0 flex-1 flex-col overflow-hidden">
+        {/* Hamburger + off-canvas drawer — below md only; sidebar handles md+ */}
+        <MobileNav />
+        <main className="flex min-h-0 flex-1 flex-col overflow-hidden">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }

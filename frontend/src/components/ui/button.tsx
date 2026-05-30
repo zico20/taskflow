@@ -18,10 +18,12 @@ const buttonVariants = cva(
           "border border-border bg-transparent text-fg hover:bg-bg-muted",
       },
       size: {
-        sm: "h-8 px-3 text-xs",
-        md: "h-9 px-4",
-        lg: "h-10 px-5",
-        icon: "h-9 w-9",
+        // On touch (below md) ensure a comfortable ~44px tap target; desktop
+        // sizing (md+) is unchanged via the md: overrides.
+        sm: "max-md:min-h-[40px] h-8 px-3 text-xs",
+        md: "max-md:min-h-[44px] h-9 px-4",
+        lg: "max-md:min-h-[44px] h-10 px-5",
+        icon: "max-md:h-11 max-md:w-11 h-9 w-9",
       },
     },
     defaultVariants: { variant: "primary", size: "md" },
