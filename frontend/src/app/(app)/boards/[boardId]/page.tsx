@@ -233,7 +233,7 @@ export default function BoardPage() {
         </div>
 
         {activityPanelOpen && (
-          <aside className="hidden w-72 shrink-0 overflow-hidden rounded-lg border border-border bg-bg-subtle/40 p-3 lg:block">
+          <aside className="glass-frost hidden w-72 shrink-0 overflow-hidden rounded-2xl p-3 lg:block">
             <ActivityFeed entries={activity} />
           </aside>
         )}

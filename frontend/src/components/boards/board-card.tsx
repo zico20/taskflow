@@ -39,10 +39,10 @@ export function BoardCard({ board }: { board: BoardSummary }) {
     <>
       <Link
         href={`/boards/${board.id}`}
-        className="group relative block overflow-hidden rounded-lg border border-border bg-bg-subtle p-5 transition-colors hover:border-accent/50 animate-fade-in"
+        className="group relative block overflow-hidden rounded-xl border border-border bg-bg-subtle p-5 shadow-glass-sm transition-all hover:-translate-y-0.5 hover:border-accent/50 animate-fade-in"
       >
         <span
-          className="absolute inset-x-0 top-0 h-1"
+          className="absolute inset-x-0 top-0 h-1.5"
           style={{ backgroundColor: board.color }}
         />
         <div className="flex items-start justify-between gap-2">
@@ -51,7 +51,7 @@ export function BoardCard({ board }: { board: BoardSummary }) {
           </h3>
           <div className="flex shrink-0 items-center gap-1.5">
             {board.role && (
-              <Badge className="bg-bg-muted text-fg-subtle">
+              <Badge className="glass-clear text-fg-muted">
                 {t(ROLE_KEY[board.role])}
               </Badge>
             )}

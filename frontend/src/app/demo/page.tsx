@@ -12,10 +12,10 @@ export default function DemoPage() {
   return (
     <div className="min-h-screen bg-bg text-fg">
       {/* Top bar */}
-      <header className="sticky top-0 z-30 border-b border-border bg-bg/80 backdrop-blur">
+      <header className="glass-bar sticky top-0 z-30 border-b border-border/60">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent text-bg">
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-accent to-accent-subtle text-bg shadow-[inset_0_1px_0_rgba(255,255,255,0.4)]">
               <LayoutGrid size={16} />
             </span>
             <span className="font-semibold">TaskFlow</span>
@@ -30,7 +30,7 @@ export default function DemoPage() {
             </Link>
             <Link
               href="/signup"
-              className="rounded-md bg-accent px-4 py-1.5 text-sm font-semibold text-bg hover:bg-accent-hover"
+              className="rounded-md bg-gradient-to-b from-accent-hover to-accent text-bg shadow-[0_4px_14px_-4px_rgb(var(--accent)/0.5),inset_0_1px_0_rgba(255,255,255,0.35)] hover:brightness-[1.07] px-4 py-1.5 text-sm font-semibold transition"
             >
               {t("demo.signupToSave")}
             </Link>

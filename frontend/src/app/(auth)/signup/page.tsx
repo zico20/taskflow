@@ -39,7 +39,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="rounded-lg border border-border bg-bg-subtle p-6">
+    <div className="glass-frost rounded-2xl p-6">
       <h2 className="mb-1 text-base font-semibold text-fg">
         {t("auth.signup.title")}
       </h2>

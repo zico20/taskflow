@@ -12,11 +12,11 @@ export function PresenceBar({
   connected: boolean;
 }) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="glass-clear flex items-center gap-2 rounded-full px-2.5 py-1.5">
       <span
         className={cn(
           "h-2 w-2 rounded-full",
-          connected ? "bg-success" : "bg-fg-subtle",
+          connected ? "bg-success shadow-[0_0_0_3px_rgb(var(--success)/0.3)]" : "bg-fg-subtle",
         )}
         title={connected ? "Live" : "Disconnected"}
       />

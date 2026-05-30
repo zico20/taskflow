@@ -30,13 +30,20 @@ export function Providers({
     <QueryClientProvider client={queryClient}>
       <LocaleProvider initialLocale={initialLocale}>{children}</LocaleProvider>
       <Toaster
-        theme="dark"
+        theme="system"
         position="bottom-right"
         toastOptions={{
+          // Clear-glass toasts. Tokens adapt to light/dark automatically.
           style: {
-            background: "#161B22",
-            border: "1px solid #30363D",
-            color: "#E6EDF3",
+            background: "var(--glass-clear-bg)",
+            backdropFilter:
+              "blur(var(--glass-blur-clear)) saturate(var(--glass-saturate))",
+            WebkitBackdropFilter:
+              "blur(var(--glass-blur-clear)) saturate(var(--glass-saturate))",
+            border: "1px solid var(--glass-clear-border)",
+            borderRadius: "0.9rem",
+            boxShadow: "var(--glass-shadow-sm)",
+            color: "rgb(var(--fg))",
           },
         }}
       />

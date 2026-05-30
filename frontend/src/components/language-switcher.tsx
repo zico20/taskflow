@@ -20,7 +20,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
       title={label}
       aria-label={label}
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-md border border-border bg-bg-subtle px-2.5 py-1.5 text-sm font-medium text-fg-muted transition-colors hover:bg-bg-muted hover:text-fg",
+        "glass-clear inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm font-medium text-fg-muted transition-colors hover:text-fg",
         className,
       )}
     >

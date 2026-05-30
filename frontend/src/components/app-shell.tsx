@@ -6,6 +6,7 @@ import { useCurrentUser, useLogout } from "@/hooks/use-auth";
 import { Avatar } from "@/components/ui/misc";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { ThemeSwitcher } from "@/components/theme-switcher";
 import { useT } from "@/lib/i18n";
 
 export function TopBar() {
@@ -14,13 +15,13 @@ export function TopBar() {
   const t = useT();
 
   return (
-    <header className="sticky top-0 z-30 border-b border-border bg-bg/80 backdrop-blur">
+    <header className="glass-bar sticky top-0 z-40 border-b border-border/60">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
         <Link href="/boards" className="flex items-center gap-2 text-fg">
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent text-bg">
+          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-accent to-accent-subtle text-bg shadow-[inset_0_1px_0_rgba(255,255,255,0.4)]">
             <LayoutGrid size={16} />
           </span>
-          <span className="font-semibold">TaskFlow</span>
+          <span className="font-semibold tracking-tight">TaskFlow</span>
         </Link>
 
         {user && (
@@ -29,6 +30,7 @@ export function TopBar() {
               <Avatar name={user.name} src={user.avatar_url} size={28} />
               <span className="text-sm text-fg-muted">{user.name}</span>
             </div>
+            <ThemeSwitcher />
             <LanguageSwitcher />
             <Button
               variant="ghost"

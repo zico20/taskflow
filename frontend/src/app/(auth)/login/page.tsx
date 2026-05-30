@@ -38,7 +38,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="rounded-lg border border-border bg-bg-subtle p-6">
+    <div className="glass-frost rounded-2xl p-6">
       <h2 className="mb-1 text-base font-semibold text-fg">
         {t("auth.login.title")}
       </h2>
@@ -70,6 +70,14 @@ export default function LoginPage() {
           <FieldError
             message={errors.password?.message ? t(errors.password.message) : undefined}
           />
+        </div>
+        <div className="flex justify-end -mt-1">
+          <Link
+            href="/forgot-password"
+            className="text-xs text-accent hover:text-accent-hover"
+          >
+            {t("auth.login.forgot")}
+          </Link>
         </div>
         <Button type="submit" className="w-full" disabled={login.isPending}>
           {login.isPending && <Spinner />}

@@ -29,7 +29,7 @@ export function TaskCardContent({ task }: { task: Task }) {
   const overdue = due ? isPast(due) && !isToday(due) : false;
 
   return (
-    <div className="rounded-md border border-border bg-bg-elevated p-3 shadow-sm transition-colors hover:border-accent/40">
+    <div className="rounded-xl border border-border bg-bg-elevated p-3 shadow-glass-sm transition-all hover:-translate-y-0.5 hover:border-accent/40">
       {task.labels.length > 0 && (
         <div className="mb-2 flex flex-wrap gap-1">
           {task.labels.map((l) => (

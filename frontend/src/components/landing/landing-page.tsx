@@ -36,10 +36,10 @@ export function LandingPage() {
   return (
     <div className="min-h-screen bg-bg text-fg">
       {/* Nav */}
-      <header className="sticky top-0 z-30 border-b border-border bg-bg/80 backdrop-blur">
+      <header className="glass-bar sticky top-0 z-30 border-b border-border/60">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
           <div className="flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-bg">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-accent to-accent-subtle text-bg shadow-[inset_0_1px_0_rgba(255,255,255,0.4)]">
               <LayoutGrid size={18} />
             </span>
             <span className="text-lg font-semibold">{t("common.appName")}</span>
@@ -54,7 +54,7 @@ export function LandingPage() {
             </Link>
             <Link
               href="/signup"
-              className="rounded-md bg-accent px-4 py-2 text-sm font-semibold text-bg transition-colors hover:bg-accent-hover"
+              className="rounded-md bg-gradient-to-b from-accent-hover to-accent text-bg shadow-[0_4px_14px_-4px_rgb(var(--accent)/0.5),inset_0_1px_0_rgba(255,255,255,0.35)] hover:brightness-[1.07] px-4 py-2 text-sm font-semibold transition"
             >
               {t("landing.nav.start")}
             </Link>
@@ -65,7 +65,7 @@ export function LandingPage() {
       {/* Hero */}
       <section className="mx-auto max-w-6xl px-4 pb-12 pt-16 text-center sm:pt-24">
         <div className="animate-fade-in">
-          <span className="inline-flex items-center gap-2 rounded-full border border-border bg-bg-subtle px-3 py-1 text-xs text-fg-muted">
+          <span className="glass-clear inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs text-fg-muted">
             <span className="h-1.5 w-1.5 rounded-full bg-success" />
             {t("landing.hero.badge")}
           </span>
@@ -81,14 +81,14 @@ export function LandingPage() {
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               href="/demo"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-accent px-6 py-3 font-semibold text-bg transition-colors hover:bg-accent-hover sm:w-auto"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-gradient-to-b from-accent-hover to-accent text-bg shadow-[0_4px_14px_-4px_rgb(var(--accent)/0.5),inset_0_1px_0_rgba(255,255,255,0.35)] hover:brightness-[1.07] px-6 py-3 font-semibold transition sm:w-auto"
             >
               {t("landing.hero.tryDemo")}
               <ArrowRight size={18} className="rtl:rotate-180" />
             </Link>
             <Link
               href="/signup"
-              className="inline-flex w-full items-center justify-center rounded-md border border-border bg-bg-subtle px-6 py-3 font-medium text-fg transition-colors hover:bg-bg-muted sm:w-auto"
+              className="inline-flex w-full items-center justify-center glass-clear rounded-md px-6 py-3 font-medium text-fg transition sm:w-auto"
             >
               {t("landing.hero.createAccount")}
             </Link>
@@ -115,7 +115,7 @@ export function LandingPage() {
             {FEATURES.map((f) => (
               <div
                 key={f.titleKey}
-                className="rounded-lg border border-border bg-bg-subtle p-6 transition-colors hover:border-accent/40"
+                className="rounded-2xl border border-border bg-bg-subtle p-6 shadow-glass-sm transition-all hover:-translate-y-0.5 hover:border-accent/40"
               >
                 <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-accent/15 text-accent">
                   <f.icon size={20} />
@@ -138,14 +138,14 @@ export function LandingPage() {
           <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               href="/demo"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-accent px-6 py-3 font-semibold text-bg transition-colors hover:bg-accent-hover sm:w-auto"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-gradient-to-b from-accent-hover to-accent text-bg shadow-[0_4px_14px_-4px_rgb(var(--accent)/0.5),inset_0_1px_0_rgba(255,255,255,0.35)] hover:brightness-[1.07] px-6 py-3 font-semibold transition sm:w-auto"
             >
               {t("landing.cta.tryDemo")}
               <ArrowRight size={18} className="rtl:rotate-180" />
             </Link>
             <Link
               href="/signup"
-              className="inline-flex w-full items-center justify-center rounded-md border border-border bg-bg-subtle px-6 py-3 font-medium text-fg transition-colors hover:bg-bg-muted sm:w-auto"
+              className="inline-flex w-full items-center justify-center glass-clear rounded-md px-6 py-3 font-medium text-fg transition sm:w-auto"
             >
               {t("landing.cta.createAccount")}
             </Link>
@@ -190,7 +190,7 @@ function BoardPreview() {
   return (
     <div
       dir="ltr"
-      className="overflow-hidden rounded-xl border border-border bg-bg-subtle p-4 shadow-2xl"
+      className="overflow-hidden rounded-2xl border border-border bg-bg-subtle p-4 shadow-glass"
     >
       <div className="mb-3 flex items-center gap-2 border-b border-border pb-3">
         <span className="h-3 w-3 rounded-full bg-danger/70" />
@@ -215,7 +215,7 @@ function BoardPreview() {
               {c.tasks.map((task) => (
                 <div
                   key={task.t}
-                  className="rounded-md border border-border bg-bg-elevated p-2.5 text-start"
+                  className="rounded-xl border border-border bg-bg-elevated p-2.5 text-start"
                 >
                   <p className="text-xs font-medium text-fg">{task.t}</p>
                   <span

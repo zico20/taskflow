@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCurrentUser } from "@/hooks/use-auth";
 import { FullPageSpinner } from "@/components/ui/misc";
 import { TopBar } from "@/components/app-shell";
+import { Backdrop } from "@/components/backdrop";
 
 /**
  * Auth gate for all app routes. While the session is loading we show a spinner;
@@ -29,9 +30,12 @@ export default function AppLayout({
   if (!user) return <FullPageSpinner />;
 
   return (
-    <div className="min-h-screen bg-bg">
-      <TopBar />
-      {children}
+    <div className="relative min-h-screen">
+      <Backdrop />
+      <div className="relative z-10">
+        <TopBar />
+        {children}
+      </div>
     </div>
   );
 }

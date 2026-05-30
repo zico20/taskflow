@@ -1,6 +1,19 @@
 import type { Config } from "tailwindcss";
 
-// Tokyo Night-inspired dark palette. #0D1117 background, #58A6FF accent.
+/**
+ * Liquid Glass palette.
+ *
+ * Color values resolve from CSS variables defined in `src/app/globals.css`, so
+ * one set of tokens drives BOTH the dark (default) and light themes — the
+ * `.light` class on <html> simply swaps the variable values.
+ *
+ * Channel variables are stored as space-separated RGB (e.g. "88 166 255") and
+ * wrapped here as `rgb(var(--x) / <alpha-value>)` so Tailwind's opacity
+ * modifiers keep working unchanged across the codebase (bg-accent/60,
+ * ring-accent/40, hover:bg-danger/10, bg-bg-subtle/50, …).
+ */
+const alpha = (v: string) => `rgb(var(${v}) / <alpha-value>)`;
+
 const config: Config = {
   darkMode: "class",
   content: [
@@ -12,38 +25,45 @@ const config: Config = {
     extend: {
       colors: {
         bg: {
-          DEFAULT: "#0D1117",
-          subtle: "#161B22",
-          muted: "#1C2128",
-          elevated: "#21262D",
+          DEFAULT: alpha("--bg"),
+          subtle: alpha("--bg-subtle"),
+          muted: alpha("--bg-muted"),
+          elevated: alpha("--bg-elevated"),
         },
         border: {
-          DEFAULT: "#30363D",
-          subtle: "#21262D",
+          DEFAULT: alpha("--border"),
+          subtle: alpha("--border-subtle"),
         },
         fg: {
-          DEFAULT: "#E6EDF3",
-          muted: "#8B949E",
-          subtle: "#6E7681",
+          DEFAULT: alpha("--fg"),
+          muted: alpha("--fg-muted"),
+          subtle: alpha("--fg-subtle"),
         },
         accent: {
-          DEFAULT: "#58A6FF",
-          hover: "#79B8FF",
-          subtle: "#1F6FEB",
+          DEFAULT: alpha("--accent"),
+          hover: alpha("--accent-hover"),
+          subtle: alpha("--accent-subtle"),
         },
-        success: "#3FB950",
-        warning: "#D29922",
-        danger: "#F85149",
+        success: alpha("--success"),
+        warning: alpha("--warning"),
+        danger: alpha("--danger"),
         priority: {
-          low: "#3FB950",
-          medium: "#D29922",
-          high: "#F85149",
+          low: alpha("--success"),
+          medium: alpha("--warning"),
+          high: alpha("--danger"),
         },
       },
       borderRadius: {
-        lg: "0.625rem",
-        md: "0.5rem",
-        sm: "0.375rem",
+        // Generous, squircle-leaning scale.
+        sm: "0.5rem",
+        md: "0.75rem",
+        lg: "1.125rem",
+        xl: "1.5rem",
+        "2xl": "1.75rem",
+      },
+      boxShadow: {
+        glass: "var(--glass-shadow)",
+        "glass-sm": "var(--glass-shadow-sm)",
       },
       keyframes: {
         "fade-in": {

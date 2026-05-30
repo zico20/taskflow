@@ -213,7 +213,7 @@ function DemoColumn({
       <div
         ref={setNodeRef}
         className={cn(
-          "flex min-h-[60px] flex-col gap-2 rounded-lg border border-transparent bg-bg-subtle/50 p-2 transition-colors",
+          "flex min-h-[60px] flex-col gap-2 rounded-xl border border-transparent bg-bg-subtle/60 p-2 transition-colors",
           isOver && "border-accent/40 bg-bg-subtle",
         )}
       >
@@ -243,7 +243,7 @@ function DemoColumn({
         )}
 
         {composing && (
-          <div className="rounded-md border border-accent/40 bg-bg-elevated p-2">
+          <div className="rounded-xl border border-accent/40 bg-bg-elevated p-2">
             <textarea
               autoFocus
               value={draft}

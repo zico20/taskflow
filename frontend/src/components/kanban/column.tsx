@@ -96,7 +96,7 @@ export function KanbanColumn({
               <MoreHorizontal size={16} />
             </button>
             {menuOpen && (
-              <div className="absolute end-0 z-20 mt-1 w-36 overflow-hidden rounded-md border border-border bg-bg-elevated py-1 shadow-xl animate-fade-in">
+              <div className="glass-clear absolute end-0 z-30 mt-1.5 w-40 overflow-hidden rounded-xl py-1 animate-scale-in">
                 <button
                   onMouseDown={() => setEditing(true)}
                   className="flex w-full items-center gap-2 px-3 py-1.5 text-sm text-fg-muted hover:bg-bg-muted hover:text-fg"
@@ -118,7 +118,7 @@ export function KanbanColumn({
       <div
         ref={setNodeRef}
         className={cn(
-          "flex min-h-[60px] flex-1 flex-col gap-2 overflow-y-auto rounded-lg border border-transparent bg-bg-subtle/50 p-2 transition-colors",
+          "flex min-h-[60px] flex-1 flex-col gap-2 overflow-y-auto rounded-xl border border-transparent bg-bg-subtle/60 p-2 transition-colors",
           isOver && "border-accent/40 bg-bg-subtle",
         )}
       >

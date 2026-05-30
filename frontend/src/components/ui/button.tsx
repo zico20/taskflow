@@ -3,16 +3,17 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 disabled:pointer-events-none disabled:opacity-50 whitespace-nowrap",
+  "relative inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-1 focus-visible:ring-offset-bg disabled:pointer-events-none disabled:opacity-50 whitespace-nowrap active:translate-y-px",
   {
     variants: {
       variant: {
         primary:
-          "bg-accent text-bg hover:bg-accent-hover font-semibold shadow-sm",
+          "bg-gradient-to-b from-accent-hover to-accent text-bg font-semibold shadow-[0_4px_14px_-4px_rgb(var(--accent)/0.55),inset_0_1px_0_rgba(255,255,255,0.35)] hover:brightness-[1.07]",
         secondary:
-          "bg-bg-elevated text-fg hover:bg-bg-muted border border-border",
+          "glass-clear text-fg hover:brightness-[1.08]",
         ghost: "text-fg-muted hover:bg-bg-muted hover:text-fg",
-        danger: "bg-danger/90 text-white hover:bg-danger",
+        danger:
+          "bg-danger/90 text-white hover:bg-danger shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]",
         outline:
           "border border-border bg-transparent text-fg hover:bg-bg-muted",
       },

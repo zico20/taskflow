@@ -2,8 +2,95 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: dark;
+/* ============================================================
+   LIQUID GLASS — DESIGN TOKENS (single source of truth)
+   Dark is the default (:root); the `.light` class on <html>
+   swaps the values. Color channels are space-separated RGB so
+   Tailwind's /<alpha> opacity modifiers keep working.
+   ============================================================ */
+@layer base {
+  :root {
+    color-scheme: dark;
+
+    /* Surfaces */
+    --bg: 13 17 23;            /* #0D1117 */
+    --bg-subtle: 22 27 34;     /* #161B22 */
+    --bg-muted: 28 33 40;      /* #1C2128 */
+    --bg-elevated: 33 38 45;   /* #21262D */
+    /* Borders */
+    --border: 48 54 61;        /* #30363D */
+    --border-subtle: 33 38 45; /* #21262D */
+    /* Foreground */
+    --fg: 230 237 243;         /* #E6EDF3 */
+    --fg-muted: 139 148 158;   /* #8B949E */
+    --fg-subtle: 110 118 129;  /* #6E7681 */
+    /* Accent + semantic */
+    --accent: 88 166 255;      /* #58A6FF */
+    --accent-hover: 121 184 255;
+    --accent-subtle: 31 111 235;
+    --success: 63 185 80;
+    --warning: 210 153 34;
+    --danger: 248 81 73;
+
+    /* Glass geometry (shared) */
+    --glass-blur-frosted: 26px;
+    --glass-blur-clear: 14px;
+    --glass-saturate: 175%;
+
+    /* Glass — frosted (large floating surfaces) */
+    --glass-frost-bg: rgba(22, 27, 34, 0.62);
+    --glass-frost-border: rgba(255, 255, 255, 0.13);
+    --glass-frost-highlight: rgba(255, 255, 255, 0.16);
+    /* Glass — clear (small floating bits) */
+    --glass-clear-bg: rgba(28, 33, 40, 0.55);
+    --glass-clear-border: rgba(255, 255, 255, 0.10);
+    --glass-clear-highlight: rgba(255, 255, 255, 0.14);
+    /* Depth + scrim */
+    --glass-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.30);
+    --glass-shadow-sm: 0 6px 20px -6px rgba(0, 0, 0, 0.5);
+    --scrim: rgba(8, 11, 16, 0.45);
+
+    /* Brand aurora behind the glass */
+    --aurora-1: #1f6feb;
+    --aurora-2: #39c5cf;
+    --aurora-3: #8957e5;
+    --aurora-opacity: 0.40;
+  }
+
+  html.light {
+    color-scheme: light;
+
+    --bg: 234 238 244;
+    --bg-subtle: 255 255 255;
+    --bg-muted: 238 241 246;
+    --bg-elevated: 255 255 255;
+    --border: 214 220 229;
+    --border-subtle: 230 234 240;
+    --fg: 26 31 39;
+    --fg-muted: 89 99 111;
+    --fg-subtle: 139 148 161;
+    --accent: 31 111 235;
+    --accent-hover: 26 95 204;
+    --accent-subtle: 88 166 255;
+    --success: 26 127 55;
+    --warning: 154 103 0;
+    --danger: 207 34 46;
+
+    --glass-frost-bg: rgba(255, 255, 255, 0.62);
+    --glass-frost-border: rgba(255, 255, 255, 0.75);
+    --glass-frost-highlight: rgba(255, 255, 255, 0.90);
+    --glass-clear-bg: rgba(255, 255, 255, 0.55);
+    --glass-clear-border: rgba(255, 255, 255, 0.60);
+    --glass-clear-highlight: rgba(255, 255, 255, 0.85);
+    --glass-shadow: 0 12px 36px -10px rgba(31, 45, 70, 0.22), 0 2px 6px rgba(31, 45, 70, 0.08);
+    --glass-shadow-sm: 0 6px 18px -8px rgba(31, 45, 70, 0.20);
+    --scrim: rgba(255, 255, 255, 0.50);
+
+    --aurora-1: #6fb1ff;
+    --aurora-2: #7ee0e6;
+    --aurora-3: #c4a6ff;
+    --aurora-opacity: 0.50;
+  }
 }
 
 html,
@@ -16,7 +103,110 @@ body {
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
-/* Thin, dark scrollbars to match the aesthetic. */
+/* ============================================================
+   GLASS MATERIAL UTILITIES
+   Apply ONLY to floating chrome (nav, modals, drawers, menus,
+   buttons, presence, toasts) — never to the work surface.
+   ============================================================ */
+@layer components {
+  .glass-frost,
+  .glass-clear {
+    position: relative;
+    -webkit-backdrop-filter: blur(var(--glass-blur-frosted)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur-frosted)) saturate(var(--glass-saturate));
+  }
+  .glass-frost {
+    background: var(--glass-frost-bg);
+    border: 1px solid var(--glass-frost-border);
+    box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-frost-highlight);
+  }
+  .glass-clear {
+    background: var(--glass-clear-bg);
+    border: 1px solid var(--glass-clear-border);
+    -webkit-backdrop-filter: blur(var(--glass-blur-clear)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur-clear)) saturate(var(--glass-saturate));
+    box-shadow: var(--glass-shadow-sm), inset 0 1px 0 var(--glass-clear-highlight);
+  }
+  /* Liquid sheen — a soft diagonal reflection across the top edge. */
+  .glass-frost::before,
+  .glass-clear::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(160deg, var(--glass-frost-highlight), transparent 42%);
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  /* Frosted full-width bar (top nav) — translucent, no full border, just a
+     hairline + inset highlight. */
+  .glass-bar {
+    background: var(--glass-frost-bg);
+    -webkit-backdrop-filter: blur(var(--glass-blur-frosted)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur-frosted)) saturate(var(--glass-saturate));
+    box-shadow: inset 0 1px 0 var(--glass-frost-highlight);
+  }
+
+  /* Brand aurora layer — sits behind content, gives the glass something
+     to refract. Kept subtle so solid work surfaces stay readable. */
+  .tf-aurora {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: var(--aurora-opacity);
+    background:
+      radial-gradient(45% 40% at 18% 10%, color-mix(in srgb, var(--aurora-1) 60%, transparent), transparent 70%),
+      radial-gradient(42% 38% at 85% 18%, color-mix(in srgb, var(--aurora-2) 50%, transparent), transparent 70%),
+      radial-gradient(50% 45% at 72% 95%, color-mix(in srgb, var(--aurora-3) 50%, transparent), transparent 72%);
+  }
+}
+
+/* ============================================================
+   ACCESSIBILITY
+   ============================================================ */
+/* Solid fallback when the user prefers reduced transparency. */
+@media (prefers-reduced-transparency: reduce) {
+  .glass-frost {
+    background: rgb(var(--bg-subtle));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .glass-clear {
+    background: rgb(var(--bg-elevated));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .glass-bar {
+    background: rgb(var(--bg-subtle));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .glass-frost::before,
+  .glass-clear::before {
+    display: none;
+  }
+  .tf-aurora {
+    display: none;
+  }
+}
+
+/* Disable reflections / transitions for reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   SCROLLBARS — themed via tokens
+   ============================================================ */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -25,13 +215,13 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #30363d;
+  background: rgb(var(--border));
   border-radius: 9999px;
   border: 2px solid transparent;
   background-clip: padding-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #484f58;
+  background: rgb(var(--fg-subtle));
   background-clip: padding-box;
 }
 

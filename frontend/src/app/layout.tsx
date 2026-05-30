@@ -43,6 +43,12 @@ export default function RootLayout({
       className={`dark ${inter.variable} ${arabic.variable}`}
     >
       <body className="font-sans">
+        {/* Apply the saved theme before first paint to avoid a flash. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('taskflow-theme');var e=document.documentElement;if(t==='light'){e.classList.add('light');e.classList.remove('dark');}else{e.classList.add('dark');e.classList.remove('light');}}catch(_){}`,
+          }}
+        />
         <Providers initialLocale={locale}>{children}</Providers>
       </body>
     </html>
