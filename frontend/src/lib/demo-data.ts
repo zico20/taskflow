@@ -22,6 +22,8 @@ function task(
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     labels: [],
+    checklist_done: 0,
+    checklist_total: 0,
   };
 }
 

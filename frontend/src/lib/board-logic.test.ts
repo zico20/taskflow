@@ -14,6 +14,8 @@ function task(id: number, columnId: number): Task {
     created_at: "2026-01-01T00:00:00Z",
     updated_at: "2026-01-01T00:00:00Z",
     labels: [],
+    checklist_done: 0,
+    checklist_total: 0,
   };
 }
 

@@ -34,6 +34,10 @@ Build boards, drag tasks across columns, and collaborate live — changes appear
 | 🗂️ | **Boards** | Unlimited boards with name, description, color theme, last-activity timestamp |
 | 📋 | **Kanban columns** | Default *To Do / In Progress / Done*; add, rename, delete, and reorder custom columns |
 | 🃏 | **Tasks** | Title, markdown description, due date, priority (Low/Med/High), color labels; edit in a drawer-style modal |
+| ✅ | **Subtasks / checklist** | Add, toggle, inline-edit, drag-reorder, and delete checklist items inside a task; a per-card progress badge (e.g. *3/5*) shows on the board; all changes broadcast live |
+| 💬 | **Comments** | Threaded text comments per task with author + relative time, oldest-first; editors/owners post, everyone (incl. viewers) reads, authors (and the board owner) delete — broadcast live |
+| 🔎 | **Filter & sort** | Client-side, presentation-only filtering by label / priority / due-status / text (conjunctive) and per-column sorting (manual / due / priority / created); manual keeps drag-and-drop, other sorts pause it. Never affects what other members see |
+| ⏰ | **Due badges** | Tasks show clear *Overdue* / *Due today* / *In N days* badges evaluated against the viewer's local day; bilingual, RTL/LTR, light/dark, reduced-motion-safe |
 | 🏷️ | **Labels** | Create named, colored labels per board and apply/remove them on tasks from the UI; delete cascades chips off every task — all live across viewers |
 | 🖱️ | **Drag & drop** | Powered by **dnd-kit** — reorder within a column and move across columns with **optimistic UI** |
 | ⚡ | **Real-time** | WebSocket per board — another user's move appears instantly, no refresh |
@@ -229,7 +233,9 @@ FastAPI serves auto-generated, interactive docs:
 | **Auth** | `POST /api/auth/signup` · `POST /api/auth/login` · `POST /api/auth/logout` · `GET /api/auth/me` · `POST /api/auth/password-reset/request` · `POST /api/auth/password-reset/confirm` |
 | **Boards** | `GET/POST /api/boards` · `GET/PATCH/DELETE /api/boards/{id}` · `POST /api/boards/{id}/members` |
 | **Columns** | `GET/POST /api/boards/{id}/columns` · `PATCH/DELETE /api/boards/{id}/columns/{cid}` · `POST /api/boards/{id}/columns/reorder` |
-| **Tasks** | `GET /api/boards/{id}/tasks` (snapshot) · `POST .../tasks?column_id=` · `GET/PATCH/DELETE .../tasks/{tid}` · `POST .../tasks/{tid}/move` |
+| **Tasks** | `GET /api/boards/{id}/tasks` (snapshot, incl. per-task checklist progress) · `POST .../tasks?column_id=` · `GET/PATCH/DELETE .../tasks/{tid}` · `POST .../tasks/{tid}/move` |
+| **Checklist** | `GET/POST .../tasks/{tid}/checklist` · `PATCH/DELETE .../checklist/{itemId}` · `POST .../checklist/reorder` |
+| **Comments** | `GET/POST .../tasks/{tid}/comments` · `DELETE .../comments/{commentId}` (author or board owner) |
 | **Labels** | `GET/POST /api/boards/{id}/labels` · `DELETE .../labels/{lid}` |
 | **Activity** | `GET /api/boards/{id}/activity` |
 | **WebSocket** | `WS /ws/boards/{board_id}` |

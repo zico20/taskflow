@@ -6,7 +6,9 @@ import type {
   BoardRole,
   BoardSnapshot,
   BoardSummary,
+  ChecklistItem,
   Column,
+  Comment,
   Label,
   Priority,
   Task,
@@ -114,6 +116,51 @@ export const tasksApi = {
     apiFetch<Task>(`/boards/${boardId}/tasks/${taskId}/move`, {
       method: "POST",
       body: { column_id: columnId, position },
+    }),
+};
+
+// --- Checklist (subtasks) ---
+export const checklistApi = {
+  list: (boardId: number, taskId: number) =>
+    apiFetch<ChecklistItem[]>(`/boards/${boardId}/tasks/${taskId}/checklist`),
+  create: (boardId: number, taskId: number, content: string) =>
+    apiFetch<ChecklistItem>(`/boards/${boardId}/tasks/${taskId}/checklist`, {
+      method: "POST",
+      body: { content },
+    }),
+  update: (
+    boardId: number,
+    taskId: number,
+    itemId: number,
+    data: { content?: string; is_done?: boolean },
+  ) =>
+    apiFetch<ChecklistItem>(
+      `/boards/${boardId}/tasks/${taskId}/checklist/${itemId}`,
+      { method: "PATCH", body: data },
+    ),
+  reorder: (boardId: number, taskId: number, itemIds: number[]) =>
+    apiFetch<ChecklistItem[]>(
+      `/boards/${boardId}/tasks/${taskId}/checklist/reorder`,
+      { method: "POST", body: { item_ids: itemIds } },
+    ),
+  remove: (boardId: number, taskId: number, itemId: number) =>
+    apiFetch<void>(`/boards/${boardId}/tasks/${taskId}/checklist/${itemId}`, {
+      method: "DELETE",
+    }),
+};
+
+// --- Comments ---
+export const commentsApi = {
+  list: (boardId: number, taskId: number) =>
+    apiFetch<Comment[]>(`/boards/${boardId}/tasks/${taskId}/comments`),
+  create: (boardId: number, taskId: number, content: string) =>
+    apiFetch<Comment>(`/boards/${boardId}/tasks/${taskId}/comments`, {
+      method: "POST",
+      body: { content },
+    }),
+  remove: (boardId: number, taskId: number, commentId: number) =>
+    apiFetch<void>(`/boards/${boardId}/tasks/${taskId}/comments/${commentId}`, {
+      method: "DELETE",
     }),
 };
 

@@ -12,7 +12,14 @@ import type {
   Task,
   WsMessage,
 } from "@/lib/types";
-import { boardKey, labelsKey, snapshotKey } from "./use-board";
+import {
+  boardKey,
+  checklistKey,
+  commentsKey,
+  labelsKey,
+  snapshotKey,
+} from "./use-board";
+import type { ChecklistItem, Comment } from "@/lib/types";
 
 interface UseBoardSocketResult {
   connected: boolean;
@@ -60,6 +67,28 @@ export function useBoardSocket(
     ) => {
       qc.setQueryData<BoardSnapshot>(snapshotKey(boardId), (prev) =>
         prev ? { ...prev, columns: fn(prev.columns) } : prev,
+      );
+    };
+
+    // Recompute a task's card progress from the per-task checklist cache (if the
+    // dialog is/was open). If nothing is cached we simply leave the snapshot
+    // counts untouched until the next full fetch — no incorrect guess.
+    const patchChecklistCounts = (taskId: number) => {
+      const items = qc.getQueryData<ChecklistItem[]>(
+        checklistKey(boardId, taskId),
+      );
+      if (!items) return;
+      const total = items.length;
+      const done = items.filter((i) => i.is_done).length;
+      setSnapshot((cols) =>
+        cols.map((c) => ({
+          ...c,
+          tasks: c.tasks.map((t) =>
+            t.id === taskId
+              ? { ...t, checklist_total: total, checklist_done: done }
+              : t,
+          ),
+        })),
       );
     };
 
@@ -167,6 +196,70 @@ export function useBoardSocket(
           qc.invalidateQueries({ queryKey: labelsKey(boardId) });
           qc.invalidateQueries({ queryKey: snapshotKey(boardId) });
           break;
+
+        // --- Checklist (subtasks) ---
+        case "checklist.created":
+        case "checklist.updated": {
+          if (isSelf) break;
+          const item = msg.data as ChecklistItem;
+          const key = checklistKey(boardId, item.task_id);
+          qc.setQueryData<ChecklistItem[]>(key, (prev) => {
+            if (!prev) return prev; // dialog not open → nothing cached
+            const exists = prev.some((i) => i.id === item.id);
+            return exists
+              ? prev.map((i) => (i.id === item.id ? item : i))
+              : [...prev, item];
+          });
+          patchChecklistCounts(item.task_id);
+          break;
+        }
+        case "checklist.reordered": {
+          if (isSelf) break;
+          const { task_id, item_ids } = msg.data;
+          const key = checklistKey(boardId, task_id);
+          qc.setQueryData<ChecklistItem[]>(key, (prev) => {
+            if (!prev) return prev;
+            const byId = new Map(prev.map((i) => [i.id, i]));
+            return item_ids
+              .map((id) => byId.get(id))
+              .filter((i): i is ChecklistItem => Boolean(i));
+          });
+          break;
+        }
+        case "checklist.deleted": {
+          if (isSelf) break;
+          const { task_id, id } = msg.data;
+          const key = checklistKey(boardId, task_id);
+          qc.setQueryData<ChecklistItem[]>(key, (prev) =>
+            prev ? prev.filter((i) => i.id !== id) : prev,
+          );
+          patchChecklistCounts(task_id);
+          break;
+        }
+
+        // --- Comments ---
+        case "comment.created": {
+          if (isSelf) break;
+          const comment = msg.data as Comment;
+          const key = commentsKey(boardId, comment.task_id);
+          qc.setQueryData<Comment[]>(key, (prev) =>
+            prev
+              ? prev.some((c) => c.id === comment.id)
+                ? prev
+                : [...prev, comment]
+              : prev,
+          );
+          break;
+        }
+        case "comment.deleted": {
+          if (isSelf) break;
+          const { task_id, id } = msg.data;
+          const key = commentsKey(boardId, task_id);
+          qc.setQueryData<Comment[]>(key, (prev) =>
+            prev ? prev.filter((c) => c.id !== id) : prev,
+          );
+          break;
+        }
         default:
           break;
       }

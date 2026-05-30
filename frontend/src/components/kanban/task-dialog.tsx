@@ -22,6 +22,8 @@ import {
   useDeleteTask,
   useUpdateTask,
 } from "@/hooks/use-board";
+import { ChecklistSection } from "./checklist-section";
+import { CommentsThread } from "./comments-thread";
 
 const schema = z.object({
   title: z.string().min(1, "task.titleRequired").max(255),
@@ -41,6 +43,9 @@ interface TaskDialogProps {
   columnId?: number;
   task?: Task | null;
   labels: LabelType[];
+  canEdit?: boolean;
+  isOwner?: boolean;
+  currentUserId?: number;
 }
 
 export function TaskDialog({
@@ -50,6 +55,9 @@ export function TaskDialog({
   columnId,
   task,
   labels,
+  canEdit = true,
+  isOwner = false,
+  currentUserId,
 }: TaskDialogProps) {
   const t = useT();
   const isEdit = Boolean(task);
@@ -241,6 +249,26 @@ export function TaskDialog({
             </div>
           </div>
         </div>
+
+        {/* Checklist + comments (edit mode only — need a persisted task id).
+            Additive: desktop layout above is unchanged. */}
+        {isEdit && task && (
+          <div className="space-y-6 border-t border-border/70 px-5 py-5">
+            <ChecklistSection
+              boardId={boardId}
+              taskId={task.id}
+              canEdit={canEdit}
+            />
+            <CommentsThread
+              boardId={boardId}
+              taskId={task.id}
+              canEdit={canEdit}
+              isOwner={isOwner}
+              currentUserId={currentUserId}
+            />
+          </div>
+        )}
+
         <DialogFooter>
           <Button type="button" variant="ghost" onClick={onClose}>
             {t("common.cancel")}

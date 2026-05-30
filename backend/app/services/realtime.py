@@ -33,8 +33,32 @@ def human_action(action_type: str, user_name: str, payload: dict[str, Any]) -> s
         "member.added": f"added {payload.get('member_name', 'a member')}",
         "label.created": f"added label '{target}'",
         "label.deleted": f"deleted label '{target}'",
+        "checklist.item_added": f"added checklist item '{target}'",
+        "checklist.item_removed": f"removed checklist item '{target}'",
+        "comment.added": "commented on a task",
+        "comment.removed": "removed a comment",
     }
     return f"{user_name} {verbs.get(action_type, action_type)}"
+
+
+async def broadcast_only(
+    db: AsyncSession,
+    *,
+    board_id: int,
+    actor: User,
+    ws_event: str,
+    ws_data: dict[str, Any],
+    exclude_conn: str | None = None,
+) -> None:
+    """Commit the pending mutation and broadcast a domain event WITHOUT writing an
+    activity-log entry. Used for high-frequency, low-signal changes (e.g. toggling
+    or reordering a checklist item) that should sync live but not spam the feed."""
+    await db.commit()
+    await manager.broadcast(
+        board_id,
+        {"type": ws_event, "data": ws_data, "actor_id": actor.id},
+        exclude=exclude_conn,
+    )
 
 
 async def record_and_broadcast(

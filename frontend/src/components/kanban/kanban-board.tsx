@@ -35,6 +35,9 @@ interface KanbanBoardProps {
   boardId: number;
   columns: ColumnWithTasks[];
   canEdit: boolean;
+  /** When false (a non-manual sort is active), drag reordering is disabled so we
+   *  never persist an order that contradicts the visible sort. Defaults to true. */
+  dragEnabled?: boolean;
   labels: LabelType[];
   onAddTask: (columnId: number) => void;
   onOpenTask: (task: Task) => void;
@@ -54,6 +57,7 @@ export function KanbanBoard({
   boardId,
   columns,
   canEdit,
+  dragEnabled = true,
   labels,
   onAddTask,
   onOpenTask,
@@ -64,6 +68,8 @@ export function KanbanBoard({
   const renameColumn = useRenameColumn(boardId);
   const deleteColumn = useDeleteColumn(boardId);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
+  // Tasks are draggable only with edit rights AND manual sort (FR-022, FR-023).
+  const canDrag = canEdit && dragEnabled;
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -78,6 +84,7 @@ export function KanbanBoard({
   };
 
   const onDragStart = (e: DragStartEvent) => {
+    if (!canDrag) return;
     const data = e.active.data.current;
     if (data?.type === "task") setActiveTask(data.task as Task);
   };
@@ -85,6 +92,7 @@ export function KanbanBoard({
   // Move the dragged task between columns live while hovering, so the layout
   // reflows under the cursor (the hallmark of a good kanban feel).
   const onDragOver = (e: DragOverEvent) => {
+    if (!canDrag) return;
     const { active, over } = e;
     if (!over) return;
     const activeId = String(active.id);
@@ -123,6 +131,7 @@ export function KanbanBoard({
 
   const onDragEnd = (e: DragEndEvent) => {
     setActiveTask(null);
+    if (!canDrag) return;
     const { active, over } = e;
     if (!over) return;
 
@@ -179,6 +188,7 @@ export function KanbanBoard({
             key={column.id}
             column={column}
             canEdit={canEdit}
+            draggable={canDrag}
             onAddTask={onAddTask}
             onOpenTask={onOpenTask}
             onRename={(columnId, name) =>

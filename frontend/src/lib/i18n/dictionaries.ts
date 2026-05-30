@@ -215,6 +215,52 @@ export const en = {
   "priority.medium": "Medium",
   "priority.high": "High",
 
+  // --- Checklist (subtasks) ---
+  "checklist.title": "Checklist",
+  "checklist.addPlaceholder": "Add an item…",
+  "checklist.add": "Add",
+  "checklist.empty": "No checklist items yet.",
+  "checklist.progress": "{done}/{total}",
+  "checklist.delete": "Delete item",
+  "checklist.itemLabel": "Checklist item",
+  "checklist.toggleDone": "Mark done",
+  "checklist.toggleUndone": "Mark not done",
+  "checklist.readOnly": "Only editors can change the checklist.",
+
+  // --- Comments ---
+  "comments.title": "Comments",
+  "comments.placeholder": "Write a comment…",
+  "comments.post": "Comment",
+  "comments.empty": "No comments yet.",
+  "comments.readOnly": "Only editors can comment.",
+  "comments.delete": "Delete comment",
+  "comments.posted": "Comment posted",
+  "comments.postError": "Couldn't post the comment",
+  "comments.deleted": "Comment deleted",
+
+  // --- Filter & sort ---
+  "filter.title": "Filters",
+  "filter.label": "Label",
+  "filter.priority": "Priority",
+  "filter.due": "Due",
+  "filter.clear": "Clear filters",
+  "filter.none": "No filters",
+  "filter.empty": "No matching tasks",
+  "sort.label": "Sort",
+  "sort.manual": "Manual",
+  "sort.due": "Due date",
+  "sort.priority": "Priority",
+  "sort.created": "Created",
+  "sort.activeHint": "Drag is paused while a sort is active",
+
+  // --- Due status ---
+  "due.overdue": "Overdue",
+  "due.today": "Due today",
+  "due.upcoming": "Upcoming",
+  "due.inDays": "In {count} days",
+  "due.inDays_one": "In {count} day",
+  "due.none": "No date",
+
   // --- Labels management ---
   "labels.title": "Manage labels",
   "labels.create": "Create label",
@@ -253,6 +299,10 @@ export const en = {
   "activity.member.removed": "{user} removed {member}",
   "activity.label.created": "{user} added label '{name}'",
   "activity.label.deleted": "{user} deleted label '{name}'",
+  "activity.checklist.item_added": "{user} added checklist item '{title}'",
+  "activity.checklist.item_removed": "{user} removed checklist item '{title}'",
+  "activity.comment.added": "{user} commented on a task",
+  "activity.comment.removed": "{user} removed a comment",
 
   // --- Demo ---
   "demo.signupToSave": "Sign up to save your work",
@@ -483,6 +533,52 @@ export const ar: Dictionary = {
   "priority.medium": "متوسطة",
   "priority.high": "عالية",
 
+  // --- Checklist (subtasks) ---
+  "checklist.title": "قائمة التحقق",
+  "checklist.addPlaceholder": "أضف عنصراً…",
+  "checklist.add": "إضافة",
+  "checklist.empty": "لا توجد عناصر بعد.",
+  "checklist.progress": "{done}/{total}",
+  "checklist.delete": "حذف العنصر",
+  "checklist.itemLabel": "عنصر قائمة التحقق",
+  "checklist.toggleDone": "تعليم كمنجز",
+  "checklist.toggleUndone": "تعليم كغير منجز",
+  "checklist.readOnly": "المحررون فقط يقدرون يعدّلون القائمة.",
+
+  // --- Comments ---
+  "comments.title": "التعليقات",
+  "comments.placeholder": "اكتب تعليقاً…",
+  "comments.post": "تعليق",
+  "comments.empty": "لا توجد تعليقات بعد.",
+  "comments.readOnly": "المحررون فقط يقدرون يعلّقون.",
+  "comments.delete": "حذف التعليق",
+  "comments.posted": "تم نشر التعليق",
+  "comments.postError": "تعذّر نشر التعليق",
+  "comments.deleted": "تم حذف التعليق",
+
+  // --- Filter & sort ---
+  "filter.title": "الفلاتر",
+  "filter.label": "التصنيف",
+  "filter.priority": "الأولوية",
+  "filter.due": "الاستحقاق",
+  "filter.clear": "مسح الفلاتر",
+  "filter.none": "بدون فلاتر",
+  "filter.empty": "لا توجد مهام مطابقة",
+  "sort.label": "الفرز",
+  "sort.manual": "يدوي",
+  "sort.due": "تاريخ الاستحقاق",
+  "sort.priority": "الأولوية",
+  "sort.created": "تاريخ الإنشاء",
+  "sort.activeHint": "السحب متوقف أثناء تفعيل الفرز",
+
+  // --- Due status ---
+  "due.overdue": "متأخّر",
+  "due.today": "مستحق اليوم",
+  "due.upcoming": "قادم",
+  "due.inDays": "خلال {count} أيام",
+  "due.inDays_one": "خلال يوم واحد",
+  "due.none": "بدون تاريخ",
+
   // --- Labels management ---
   "labels.title": "إدارة التصنيفات",
   "labels.create": "إنشاء تصنيف",
@@ -519,6 +615,10 @@ export const ar: Dictionary = {
   "activity.member.removed": "أزال {user} العضو {member}",
   "activity.label.created": "أضاف {user} التصنيف '{name}'",
   "activity.label.deleted": "حذف {user} التصنيف '{name}'",
+  "activity.checklist.item_added": "أضاف {user} عنصر قائمة '{title}'",
+  "activity.checklist.item_removed": "أزال {user} عنصر قائمة '{title}'",
+  "activity.comment.added": "علّق {user} على مهمة",
+  "activity.comment.removed": "أزال {user} تعليقاً",
 
   // --- Demo ---
   "demo.signupToSave": "سجّل لحفظ شغلك",

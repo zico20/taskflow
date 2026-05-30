@@ -29,7 +29,12 @@ async def list_for_board_with_tasks(db: AsyncSession, board_id: int) -> list[Col
     result = await db.execute(
         select(Column)
         .where(Column.board_id == board_id)
-        .options(selectinload(Column.tasks).selectinload(Task.labels))
+        .options(
+            selectinload(Column.tasks).selectinload(Task.labels),
+            # Eager-load checklist items so each task's progress summary
+            # (done/total) is computed without a per-task lazy load (no N+1).
+            selectinload(Column.tasks).selectinload(Task.checklist_items),
+        )
         .order_by(Column.position, Column.id)
     )
     return list(result.scalars().unique().all())

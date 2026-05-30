@@ -1,7 +1,9 @@
 """Import all models here so Alembic / metadata sees them."""
 from app.models.activity import ActivityLog
 from app.models.board import Board, BoardMember, BoardRole
+from app.models.checklist_item import ChecklistItem
 from app.models.column import Column
+from app.models.comment import Comment
 from app.models.label import Label, TaskLabel
 from app.models.task import Task, TaskPriority
 from app.models.user import User
@@ -17,4 +19,6 @@ __all__ = [
     "Label",
     "TaskLabel",
     "ActivityLog",
+    "ChecklistItem",
+    "Comment",
 ]

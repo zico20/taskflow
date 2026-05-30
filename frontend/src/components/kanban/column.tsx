@@ -16,6 +16,8 @@ import { useT } from "@/lib/i18n";
 interface KanbanColumnProps {
   column: ColumnWithTasks;
   canEdit: boolean;
+  /** Whether task cards can be dragged (false when a non-manual sort is active). */
+  draggable?: boolean;
   onAddTask: (columnId: number) => void;
   onOpenTask: (task: Task) => void;
   onRename: (columnId: number, name: string) => void;
@@ -25,6 +27,7 @@ interface KanbanColumnProps {
 export function KanbanColumn({
   column,
   canEdit,
+  draggable = true,
   onAddTask,
   onOpenTask,
   onRename,
@@ -130,6 +133,7 @@ export function KanbanColumn({
             <SortableTaskCard
               key={task.id}
               task={task}
+              draggable={draggable}
               onClick={() => onOpenTask(task)}
             />
           ))}

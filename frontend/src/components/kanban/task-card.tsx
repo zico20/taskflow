@@ -2,13 +2,13 @@
 
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Calendar } from "lucide-react";
-import { format, isPast, isToday } from "date-fns";
+import { CheckSquare } from "lucide-react";
 import { Badge } from "@/components/ui/misc";
 import { cn } from "@/lib/utils";
-import { useT, useLocale, dateFnsLocale } from "@/lib/i18n";
+import { useT, useTCount } from "@/lib/i18n";
 import type { MessageKey } from "@/lib/i18n";
 import type { Priority, Task } from "@/lib/types";
+import { dueInfo, type DueStatus } from "@/lib/due-status";
 
 const PRIORITY_COLOR: Record<Priority, string> = {
   low: "#3FB950",
@@ -22,14 +22,35 @@ const PRIORITY_KEY: Record<Priority, MessageKey> = {
   high: "priority.high",
 };
 
+// Per-status badge color (CSS-var driven where possible; explicit hexes match the
+// existing palette used elsewhere on the card).
+const DUE_COLOR: Record<Exclude<DueStatus, "none">, string> = {
+  overdue: "#F85149", // danger
+  today: "#D29922", // warning
+  upcoming: "#8B949E", // neutral / fg-subtle
+};
+
+function DueBadge({ dueDate }: { dueDate: string | null }) {
+  const t = useT();
+  const tc = useTCount();
+  const info = dueInfo(dueDate);
+  if (info.status === "none") return null;
+
+  const label =
+    info.status === "overdue"
+      ? t("due.overdue")
+      : info.status === "today"
+        ? t("due.today")
+        : tc("due.inDays", info.days);
+
+  return <Badge color={DUE_COLOR[info.status]}>{label}</Badge>;
+}
+
 export function TaskCardContent({ task }: { task: Task }) {
   const t = useT();
-  const { locale } = useLocale();
-  const due = task.due_date ? new Date(task.due_date) : null;
-  const overdue = due ? isPast(due) && !isToday(due) : false;
 
   return (
-    <div className="rounded-xl border border-border bg-bg-elevated p-3 shadow-glass-sm transition-all hover:-translate-y-0.5 hover:border-accent/40">
+    <div className="rounded-xl border border-border bg-bg-elevated p-3 shadow-glass-sm transition-all hover:-translate-y-0.5 hover:border-accent/40 motion-reduce:transition-none">
       {task.labels.length > 0 && (
         <div className="mb-2 flex flex-wrap gap-1">
           {task.labels.map((l) => (
@@ -45,19 +66,15 @@ export function TaskCardContent({ task }: { task: Task }) {
       <p dir="auto" className="text-sm font-medium leading-snug text-fg">
         {task.title}
       </p>
-      <div className="mt-2.5 flex items-center justify-between">
+      <div className="mt-2.5 flex flex-wrap items-center gap-2">
         <Badge color={PRIORITY_COLOR[task.priority]}>
           {t(PRIORITY_KEY[task.priority])}
         </Badge>
-        {due && (
-          <span
-            className={cn(
-              "inline-flex items-center gap-1 text-[11px]",
-              overdue ? "text-danger" : "text-fg-subtle",
-            )}
-          >
-            <Calendar size={11} />
-            {format(due, "MMM d", { locale: dateFnsLocale(locale) })}
+        <DueBadge dueDate={task.due_date} />
+        {task.checklist_total > 0 && (
+          <span className="inline-flex items-center gap-1 text-[11px] tabular-nums text-fg-subtle">
+            <CheckSquare size={11} />
+            {task.checklist_done}/{task.checklist_total}
           </span>
         )}
       </div>
@@ -68,9 +85,11 @@ export function TaskCardContent({ task }: { task: Task }) {
 export function SortableTaskCard({
   task,
   onClick,
+  draggable = true,
 }: {
   task: Task;
   onClick: () => void;
+  draggable?: boolean;
 }) {
   const {
     attributes,
@@ -79,7 +98,11 @@ export function SortableTaskCard({
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: `task-${task.id}`, data: { type: "task", task } });
+  } = useSortable({
+    id: `task-${task.id}`,
+    data: { type: "task", task },
+    disabled: !draggable,
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -91,10 +114,13 @@ export function SortableTaskCard({
     <div
       ref={setNodeRef}
       style={style}
-      {...attributes}
-      {...listeners}
+      {...(draggable ? attributes : {})}
+      {...(draggable ? listeners : {})}
       onClick={onClick}
-      className="cursor-grab touch-none active:cursor-grabbing"
+      className={cn(
+        "touch-none",
+        draggable ? "cursor-grab active:cursor-grabbing" : "cursor-pointer",
+      )}
     >
       <TaskCardContent task={task} />
     </div>

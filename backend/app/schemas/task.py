@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from datetime import datetime
+from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from app.models.task import TaskPriority
 from app.schemas.label import LabelPublic
@@ -44,6 +45,40 @@ class TaskPublic(BaseModel):
     created_at: datetime
     updated_at: datetime
     labels: list[LabelPublic] = []
+    # Checklist progress summary for the board card (derived, not stored).
+    checklist_done: int = 0
+    checklist_total: int = 0
+
+    @model_validator(mode="before")
+    @classmethod
+    def _summarize_checklist(cls, data: Any) -> Any:
+        """When validating from an ORM Task whose checklist_items are already
+        loaded, derive the done/total counts for the board card. Never triggers a
+        lazy load: if the relationship isn't loaded, counts default to 0 and the
+        card simply shows no progress indicator until the snapshot provides them."""
+        from sqlalchemy import inspect as sa_inspect
+
+        if not isinstance(data, dict) and hasattr(data, "__mapper__"):
+            state = sa_inspect(data)
+            if "checklist_items" in state.unloaded:
+                return data  # leave counts at their 0 defaults; don't lazy-load
+            items = data.checklist_items
+            done = sum(1 for i in items if i.is_done)
+            return {
+                "id": data.id,
+                "column_id": data.column_id,
+                "title": data.title,
+                "description": data.description,
+                "due_date": data.due_date,
+                "priority": data.priority,
+                "position": data.position,
+                "created_at": data.created_at,
+                "updated_at": data.updated_at,
+                "labels": list(data.labels),
+                "checklist_done": done,
+                "checklist_total": len(items),
+            }
+        return data
 
 
 class ColumnWithTasks(BaseModel):

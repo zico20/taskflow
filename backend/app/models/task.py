@@ -11,7 +11,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base, TimestampMixin
 
 if TYPE_CHECKING:
+    from app.models.checklist_item import ChecklistItem
     from app.models.column import Column
+    from app.models.comment import Comment
     from app.models.label import Label
 
 
@@ -43,4 +45,14 @@ class Task(Base, TimestampMixin):
     column: Mapped[Column] = relationship(back_populates="tasks")
     labels: Mapped[list[Label]] = relationship(
         secondary="task_labels", back_populates="tasks"
+    )
+    checklist_items: Mapped[list[ChecklistItem]] = relationship(
+        back_populates="task",
+        cascade="all, delete-orphan",
+        order_by="ChecklistItem.position, ChecklistItem.id",
+    )
+    comments: Mapped[list[Comment]] = relationship(
+        back_populates="task",
+        cascade="all, delete-orphan",
+        order_by="Comment.created_at, Comment.id",
     )

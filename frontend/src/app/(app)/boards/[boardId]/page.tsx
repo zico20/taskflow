@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { EmptyState, FullPageSpinner } from "@/components/ui/misc";
 import { KanbanBoard } from "@/components/kanban/kanban-board";
+import { BoardFilterBar } from "@/components/kanban/board-filter-bar";
 import { TaskDialog } from "@/components/kanban/task-dialog";
 import { AddColumnDialog } from "@/components/kanban/add-column-dialog";
 import { ActivityDrawer } from "@/components/kanban/activity-drawer";
@@ -33,6 +34,8 @@ import { useCurrentUser } from "@/hooks/use-auth";
 import { useKeyboardShortcuts } from "@/hooks/use-keyboard-shortcuts";
 import { activityApi } from "@/lib/endpoints";
 import { useUiStore } from "@/stores/ui-store";
+import { useBoardViewStore } from "@/stores/board-view-store";
+import { applyView, EMPTY_VIEW } from "@/lib/task-filter-sort";
 import { useT } from "@/lib/i18n";
 import type { ColumnWithTasks, Task } from "@/lib/types";
 
@@ -84,20 +87,15 @@ export default function BoardPage() {
     onFocusSearch: () => searchRef.current?.focus(),
   });
 
-  // Apply search filter to the columns (title/label match).
+  // Client-only filter/sort view state (Zustand), keyed by this board.
+  const view = useBoardViewStore((s) => s.byBoard[boardId]) ?? EMPTY_VIEW;
+  const dragEnabled = view.sort === "manual";
+
+  // Apply text search + filters + sort to the columns (presentation only).
   const filteredColumns: ColumnWithTasks[] = useMemo(() => {
     if (!snapshot) return [];
-    const q = search.trim().toLowerCase();
-    if (!q) return snapshot.columns;
-    return snapshot.columns.map((c) => ({
-      ...c,
-      tasks: c.tasks.filter(
-        (t) =>
-          t.title.toLowerCase().includes(q) ||
-          t.labels.some((l) => l.name.toLowerCase().includes(q)),
-      ),
-    }));
-  }, [snapshot, search]);
+    return applyView(snapshot.columns, view, search);
+  }, [snapshot, search, view]);
 
   if (boardLoading || snapLoading) return <FullPageSpinner />;
 
@@ -196,6 +194,13 @@ export default function BoardPage() {
         <PresenceBar viewers={viewers} connected={connected} />
       </div>
 
+      {/* Filter & sort bar (additive; below the toolbar). */}
+      {hasColumns && (
+        <div className="flex-shrink-0 px-4 pt-3 sm:px-6">
+          <BoardFilterBar boardId={boardId} labels={labels} />
+        </div>
+      )}
+
       {/* Kanban surface (full width) */}
       <div className="min-h-0 flex-1 overflow-hidden px-4 py-4 sm:px-6 sm:py-5">
         {!hasColumns ? (
@@ -216,6 +221,7 @@ export default function BoardPage() {
             boardId={boardId}
             columns={filteredColumns}
             canEdit={!!canEdit}
+            dragEnabled={dragEnabled}
             labels={labels}
             onAddTask={(columnId) => setTaskDialog({ columnId })}
             onOpenTask={(task) => setTaskDialog({ task })}
@@ -240,6 +246,9 @@ export default function BoardPage() {
           columnId={taskDialog.columnId}
           task={taskDialog.task}
           labels={labels}
+          canEdit={!!canEdit}
+          isOwner={isOwner}
+          currentUserId={user?.id}
         />
       )}
       <AddColumnDialog

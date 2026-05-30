@@ -21,6 +21,10 @@ export const snapshotKey = (boardId: number) =>
 export const boardKey = (boardId: number) => ["board", boardId] as const;
 export const labelsKey = (boardId: number) =>
   ["board", boardId, "labels"] as const;
+export const checklistKey = (boardId: number, taskId: number) =>
+  ["board", boardId, "task", taskId, "checklist"] as const;
+export const commentsKey = (boardId: number, taskId: number) =>
+  ["board", boardId, "task", taskId, "comments"] as const;
 
 // --- Queries ---
 export function useBoardDetail(boardId: number) {

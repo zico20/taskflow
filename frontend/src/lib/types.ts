@@ -50,6 +50,26 @@ export interface Task {
   created_at: string;
   updated_at: string;
   labels: Label[];
+  checklist_done: number;
+  checklist_total: number;
+}
+
+export interface ChecklistItem {
+  id: number;
+  task_id: number;
+  content: string;
+  is_done: boolean;
+  position: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Comment {
+  id: number;
+  task_id: number;
+  content: string;
+  author: User;
+  created_at: string;
 }
 
 export interface Column {
@@ -110,4 +130,22 @@ export type WsMessage =
   | { type: "board.updated"; data: Partial<BoardSummary>; actor_id: number }
   | { type: "label.created"; data: Label; actor_id: number }
   | { type: "label.deleted"; data: { id: number }; actor_id: number }
+  | { type: "checklist.created"; data: ChecklistItem; actor_id: number }
+  | { type: "checklist.updated"; data: ChecklistItem; actor_id: number }
+  | {
+      type: "checklist.reordered";
+      data: { task_id: number; item_ids: number[] };
+      actor_id: number;
+    }
+  | {
+      type: "checklist.deleted";
+      data: { task_id: number; id: number };
+      actor_id: number;
+    }
+  | { type: "comment.created"; data: Comment; actor_id: number }
+  | {
+      type: "comment.deleted";
+      data: { task_id: number; id: number };
+      actor_id: number;
+    }
   | { type: "pong" };

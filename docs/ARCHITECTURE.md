@@ -46,6 +46,9 @@ erDiagram
     BOARD ||--o{ ACTIVITY_LOG : records
     COLUMN ||--o{ TASK : contains
     TASK }o--o{ LABEL : "tagged via TASK_LABEL"
+    TASK ||--o{ CHECKLIST_ITEM : "has"
+    TASK ||--o{ COMMENT : "has"
+    USER ||--o{ COMMENT : authors
 
     USER { int id PK; string email UK; string password_hash; string name; string avatar_url }
     BOARD { int id PK; int owner_id FK; string name; string description; string color }
@@ -53,8 +56,20 @@ erDiagram
     COLUMN { int id PK; int board_id FK; string name; int position }
     TASK { int id PK; int column_id FK; string title; text description; datetime due_date; enum priority; int position }
     LABEL { int id PK; int board_id FK; string name; string color }
+    CHECKLIST_ITEM { int id PK; int task_id FK; string content; bool is_done; int position }
+    COMMENT { int id PK; int task_id FK; int user_id FK; text content; datetime created_at }
     ACTIVITY_LOG { int id PK; int board_id FK; int user_id FK; string action_type; json payload }
 ```
+
+`CHECKLIST_ITEM` and `COMMENT` are children of a task (`ON DELETE CASCADE`, so deleting
+a task removes both). Checklist items use the same gapped-`position` ordering as tasks/
+columns. The board snapshot carries each task's `checklist_done`/`checklist_total` so the
+card can show progress without fetching every item; full item lists and comment threads
+load on demand when a task dialog opens. **Filtering and sorting are client-only** view
+state (Zustand, `board-view-store`) layered over the snapshot via the pure
+`lib/task-filter-sort.ts` helper — they never hit the server and never affect other
+members. Due-status badges are computed client-side from `due_date` vs the viewer's local
+day (`lib/due-status.ts`).
 
 ### Ordering & drag-drop positions
 
@@ -108,6 +123,14 @@ The **ConnectionManager** keeps `board_id → {conn_id → WebSocket}` plus a **
 registry (`board_id → {conn_id → user}`, de-duplicated by user id for multi-tab). On
 connect/disconnect it broadcasts the current viewer list; dead sockets are pruned on
 send failure.
+
+**Domain events** broadcast on the board channel (all carry `actor_id`; clients ignore
+their own echo): `task.created|updated|deleted|moved`, `column.created|updated|deleted|
+reordered`, `label.created|deleted`, `checklist.created|updated|reordered|deleted`, and
+`comment.created|deleted`. Most mutations also write an `ActivityLog` row via
+`realtime.record_and_broadcast()`. High-frequency, low-signal checklist changes (toggle,
+reorder) use `realtime.broadcast_only()` instead — they sync live but are intentionally
+**not** logged to the activity feed (only add/remove are), keeping the feed readable.
 
 ## Scaling path: in-memory → Redis Pub/Sub
 
