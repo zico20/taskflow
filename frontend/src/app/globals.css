@@ -12,6 +12,9 @@
   :root {
     color-scheme: dark;
 
+    /* Layout */
+    --sidebar-w: 264px;
+
     /* Surfaces */
     --bg: 13 17 23;            /* #0D1117 */
     --bg-subtle: 22 27 34;     /* #161B22 */

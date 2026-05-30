@@ -42,8 +42,9 @@ Build boards, drag tasks across columns, and collaborate live — changes appear
 | 👤 | **Roles & sharing** | Owner / Editor / Viewer model; owners invite members by email, change roles, and remove members from a Board Settings panel — owner protected, enforced server-side |
 | ⌨️ | **Keyboard shortcuts** | `n` new task · `/` focus search · `Esc` close modals |
 | 🌐 | **Bilingual + RTL/LTR** | Full Arabic/English UI with a language switcher on every screen; direction flips live, preference persists, dynamic content (dates, activity feed) localized |
-| 🪟 | **Liquid Glass design** | Translucent, luminous *floating* chrome (top bar, dialogs, menus, pills) over solid, readable work surfaces, with a brand aurora backdrop; one token set drives the whole system |
-| 🌗 | **Light & Dark themes** | A theme toggle in the top bar (and on auth screens) switches the whole UI instantly, persists per device, and applies before first paint (no flash); Dark by default |
+| 🪟 | **Liquid Glass design** | Translucent, luminous *floating* chrome (sidebar, dialogs, menus, pills) over solid, readable work surfaces, with a brand aurora backdrop; one token set drives the whole system |
+| 🧭 | **Sidebar navigation** | A persistent sidebar (brand, "All boards", a quick-switch board list, and user/theme/language/logout) replaces the top bar; collapses to an icon rail on narrow screens and mirrors to the right in Arabic. Boards are grouped by role (owned / shared-can-edit / shared-view-only); activity opens in a slide-over drawer |
+| 🌗 | **Light & Dark themes** | A theme toggle in the sidebar (and on auth screens) switches the whole UI instantly, persists per device, and applies before first paint (no flash); Dark by default |
 | 🌙 | **Polished UI** | Mobile-responsive, smooth animations, friendly empty states; honors `prefers-reduced-transparency` (glass → solid) and `prefers-reduced-motion` |
 
 ---

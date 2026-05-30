@@ -109,6 +109,11 @@ export const en = {
   "boards.role.owner": "owner",
   "boards.role.editor": "editor",
   "boards.role.viewer": "viewer",
+  "boards.group.owned": "Owned by you",
+  "boards.group.editor": "Shared · can edit",
+  "boards.group.viewer": "Shared · view only",
+  "nav.allBoards": "All boards",
+  "nav.boards": "Boards",
 
   // --- Create board dialog ---
   "createBoard.title": "Create board",
@@ -371,6 +376,11 @@ export const ar: Dictionary = {
   "boards.role.owner": "مالك",
   "boards.role.editor": "محرّر",
   "boards.role.viewer": "مشاهد",
+  "boards.group.owned": "لوحاتك",
+  "boards.group.editor": "مشتركة · تحرير",
+  "boards.group.viewer": "مشتركة · مشاهدة",
+  "nav.allBoards": "كل اللوحات",
+  "nav.boards": "اللوحات",
 
   // --- Create board dialog ---
   "createBoard.title": "إنشاء لوحة",

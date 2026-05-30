@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { Trash2, UserPlus } from "lucide-react";
+import { Trash2, UserPlus, SlidersHorizontal, Users } from "lucide-react";
 import {
   Dialog,
   DialogBody,
@@ -38,32 +38,43 @@ export function BoardSettingsDialog({
   const t = useT();
   const [tab, setTab] = useState<"details" | "members">("details");
 
-  return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogHeader title={t("settings.title")} onClose={onClose} />
-      {/* Tabs */}
-      <div className="flex gap-1 border-b border-border px-5">
-        {(["details", "members"] as const).map((id) => (
-          <button
-            key={id}
-            onClick={() => setTab(id)}
-            className={cn(
-              "-mb-px border-b-2 px-3 py-2.5 text-sm font-medium transition-colors",
-              tab === id
-                ? "border-accent text-fg"
-                : "border-transparent text-fg-muted hover:text-fg",
-            )}
-          >
-            {t(id === "details" ? "settings.tab.details" : "settings.tab.members")}
-          </button>
-        ))}
-      </div>
+  const TABS = [
+    { id: "details" as const, key: "settings.tab.details", icon: SlidersHorizontal },
+    { id: "members" as const, key: "settings.tab.members", icon: Users },
+  ];
 
-      {tab === "details" ? (
-        <DetailsTab board={board} onClose={onClose} />
-      ) : (
-        <MembersTab board={board} />
-      )}
+  return (
+    <Dialog open={open} onClose={onClose} className="max-w-2xl">
+      <DialogHeader title={t("settings.title")} onClose={onClose} />
+      <div className="grid sm:grid-cols-[180px_1fr]">
+        {/* Side tab rail */}
+        <div className="flex gap-1 border-b border-border/70 p-3 sm:flex-col sm:border-b-0 sm:border-e">
+          {TABS.map(({ id, key, icon: Icon }) => (
+            <button
+              key={id}
+              onClick={() => setTab(id)}
+              className={cn(
+                "flex flex-1 items-center gap-2.5 rounded-md px-3 py-2 text-left text-[13.5px] font-medium transition-colors sm:flex-none",
+                tab === id
+                  ? "glass-clear text-fg"
+                  : "text-fg-muted hover:bg-fg/[0.07] hover:text-fg",
+              )}
+            >
+              <Icon size={16} className="shrink-0" />
+              {t(key)}
+            </button>
+          ))}
+        </div>
+
+        {/* Active pane */}
+        <div className="min-w-0">
+          {tab === "details" ? (
+            <DetailsTab board={board} onClose={onClose} />
+          ) : (
+            <MembersTab board={board} />
+          )}
+        </div>
+      </div>
     </Dialog>
   );
 }

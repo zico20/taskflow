@@ -5,14 +5,13 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import {
-  ArrowLeft,
+  ChevronRight,
   ListTodo,
   Plus,
   Search,
   Settings,
   Tags,
-  PanelRightClose,
-  PanelRightOpen,
+  Activity,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,7 +19,7 @@ import { EmptyState, FullPageSpinner } from "@/components/ui/misc";
 import { KanbanBoard } from "@/components/kanban/kanban-board";
 import { TaskDialog } from "@/components/kanban/task-dialog";
 import { AddColumnDialog } from "@/components/kanban/add-column-dialog";
-import { ActivityFeed } from "@/components/kanban/activity-feed";
+import { ActivityDrawer } from "@/components/kanban/activity-drawer";
 import { PresenceBar } from "@/components/kanban/presence-bar";
 import { BoardSettingsDialog } from "@/components/boards/board-settings-dialog";
 import { ManageLabelsDialog } from "@/components/kanban/manage-labels-dialog";
@@ -104,7 +103,7 @@ export default function BoardPage() {
 
   if (isError || !board) {
     return (
-      <main className="mx-auto max-w-2xl px-4 py-20">
+      <div className="mx-auto max-w-2xl px-6 py-20">
         <EmptyState
           icon={<ListTodo size={22} />}
           title={t("board.notFound.title")}
@@ -115,54 +114,31 @@ export default function BoardPage() {
             </Link>
           }
         />
-      </main>
+      </div>
     );
   }
 
   const hasColumns = (snapshot?.columns.length ?? 0) > 0;
 
   return (
-    <div className="mx-auto flex h-[calc(100vh-3.5rem)] max-w-[100rem] flex-col px-4 py-4">
-      {/* Board header */}
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <Link
-            href="/boards"
-            className="rounded-md p-1.5 text-fg-subtle hover:bg-bg-muted hover:text-fg"
-          >
-            <ArrowLeft size={18} className="rtl:rotate-180" />
+    <>
+      {/* Context header */}
+      <header className="flex h-[60px] flex-shrink-0 items-center gap-3.5 border-b border-border/60 px-6">
+        <nav className="flex items-center gap-2 text-[12.5px] text-fg-subtle">
+          <Link href="/boards" className="transition-colors hover:text-fg">
+            {t("nav.boards")}
           </Link>
-          <span
-            className="h-5 w-1.5 rounded-full"
-            style={{ backgroundColor: board.color }}
-          />
-          <div>
-            <h1 dir="auto" className="text-lg font-semibold text-fg">
-              {board.name}
-            </h1>
-            {board.description && (
-              <p dir="auto" className="text-xs text-fg-subtle">
-                {board.description}
-              </p>
-            )}
-          </div>
-        </div>
+          <ChevronRight size={13} className="rtl:rotate-180" />
+        </nav>
+        <span
+          className="h-2.5 w-2.5 rounded-[3px]"
+          style={{ backgroundColor: board.color }}
+        />
+        <h1 dir="auto" className="text-[17px] font-bold tracking-tight text-fg">
+          {board.name}
+        </h1>
 
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <Search
-              size={14}
-              className="pointer-events-none absolute start-2.5 top-1/2 -translate-y-1/2 text-fg-subtle"
-            />
-            <Input
-              ref={searchRef}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder={t("board.search")}
-              className="h-9 w-44 ps-8"
-            />
-          </div>
-          <PresenceBar viewers={viewers} connected={connected} />
+        <div className="flex flex-1 items-center justify-end gap-1">
           {canEdit && (
             <Button
               variant="ghost"
@@ -171,16 +147,6 @@ export default function BoardPage() {
               title={t("labels.title")}
             >
               <Tags size={16} />
-            </Button>
-          )}
-          {isOwner && (
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setSettingsOpen(true)}
-              title={t("board.settings")}
-            >
-              <Settings size={16} />
             </Button>
           )}
           <Button
@@ -192,52 +158,75 @@ export default function BoardPage() {
                 ? t("board.activity.toggleHide")
                 : t("board.activity.toggleShow")
             }
-            className="hidden lg:inline-flex"
           >
-            {activityPanelOpen ? (
-              <PanelRightClose size={16} />
-            ) : (
-              <PanelRightOpen size={16} />
-            )}
+            <Activity size={16} />
           </Button>
-        </div>
-      </div>
-
-      {/* Body: board + activity sidebar */}
-      <div className="flex min-h-0 flex-1 gap-4">
-        <div className="min-w-0 flex-1">
-          {!hasColumns ? (
-            <EmptyState
-              icon={<ListTodo size={22} />}
-              title={t("board.empty.title")}
-              description={t("board.empty.desc")}
-              action={
-                canEdit && (
-                  <Button onClick={() => setAddColumnOpen(true)}>
-                    <Plus size={16} /> {t("board.addColumn")}
-                  </Button>
-                )
-              }
-            />
-          ) : (
-            <KanbanBoard
-              boardId={boardId}
-              columns={filteredColumns}
-              canEdit={!!canEdit}
-              labels={labels}
-              onAddTask={(columnId) => setTaskDialog({ columnId })}
-              onOpenTask={(task) => setTaskDialog({ task })}
-              onAddColumn={() => setAddColumnOpen(true)}
-            />
+          {isOwner && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setSettingsOpen(true)}
+              title={t("board.settings")}
+            >
+              <Settings size={16} />
+            </Button>
           )}
         </div>
+      </header>
 
-        {activityPanelOpen && (
-          <aside className="glass-frost hidden w-72 shrink-0 overflow-hidden rounded-2xl p-3 lg:block">
-            <ActivityFeed entries={activity} />
-          </aside>
+      {/* Toolbar row: search + presence */}
+      <div className="flex flex-shrink-0 items-center gap-3 px-6 pt-5">
+        <div className="relative">
+          <Search
+            size={14}
+            className="pointer-events-none absolute start-2.5 top-1/2 -translate-y-1/2 text-fg-subtle"
+          />
+          <Input
+            ref={searchRef}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder={t("board.search")}
+            className="h-9 w-56 ps-8"
+          />
+        </div>
+        <div className="flex-1" />
+        <PresenceBar viewers={viewers} connected={connected} />
+      </div>
+
+      {/* Kanban surface (full width) */}
+      <div className="min-h-0 flex-1 overflow-hidden px-6 py-5">
+        {!hasColumns ? (
+          <EmptyState
+            icon={<ListTodo size={22} />}
+            title={t("board.empty.title")}
+            description={t("board.empty.desc")}
+            action={
+              canEdit && (
+                <Button onClick={() => setAddColumnOpen(true)}>
+                  <Plus size={16} /> {t("board.addColumn")}
+                </Button>
+              )
+            }
+          />
+        ) : (
+          <KanbanBoard
+            boardId={boardId}
+            columns={filteredColumns}
+            canEdit={!!canEdit}
+            labels={labels}
+            onAddTask={(columnId) => setTaskDialog({ columnId })}
+            onOpenTask={(task) => setTaskDialog({ task })}
+            onAddColumn={() => setAddColumnOpen(true)}
+          />
         )}
       </div>
+
+      {/* Activity drawer (slide-over) */}
+      <ActivityDrawer
+        open={activityPanelOpen}
+        onClose={toggleActivityPanel}
+        entries={activity}
+      />
 
       {/* Dialogs */}
       {taskDialog && (
@@ -269,6 +258,6 @@ export default function BoardPage() {
           onClose={() => setLabelsOpen(false)}
         />
       )}
-    </div>
+    </>
   );
 }

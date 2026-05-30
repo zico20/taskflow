@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import { useT } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { ThemeSwitcher } from "@/components/theme-switcher";
+import { Backdrop } from "@/components/backdrop";
 import type { MessageKey } from "@/lib/i18n";
 
 // Public landing page. Direction is inherited from <html> (set server-side from
@@ -34,7 +36,8 @@ export function LandingPage() {
   const t = useT();
 
   return (
-    <div className="min-h-screen bg-bg text-fg">
+    <div className="relative min-h-screen bg-bg text-fg">
+      <Backdrop />
       {/* Nav */}
       <header className="glass-bar sticky top-0 z-30 border-b border-border/60">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
@@ -45,6 +48,7 @@ export function LandingPage() {
             <span className="text-lg font-semibold">{t("common.appName")}</span>
           </div>
           <nav className="flex items-center gap-2">
+            <ThemeSwitcher />
             <LanguageSwitcher />
             <Link
               href="/login"
@@ -63,7 +67,7 @@ export function LandingPage() {
       </header>
 
       {/* Hero */}
-      <section className="mx-auto max-w-6xl px-4 pb-12 pt-16 text-center sm:pt-24">
+      <section className="relative z-10 mx-auto max-w-6xl px-4 pb-12 pt-16 text-center sm:pt-24">
         <div className="animate-fade-in">
           <span className="glass-clear inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs text-fg-muted">
             <span className="h-1.5 w-1.5 rounded-full bg-success" />

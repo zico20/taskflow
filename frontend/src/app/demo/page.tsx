@@ -4,13 +4,16 @@ import Link from "next/link";
 import { LayoutGrid, Info } from "lucide-react";
 import { DemoBoard } from "@/components/demo/demo-board";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { ThemeSwitcher } from "@/components/theme-switcher";
+import { Backdrop } from "@/components/backdrop";
 import { useT } from "@/lib/i18n";
 
 // Public, no-auth demo. Fully client-side — nothing is saved.
 export default function DemoPage() {
   const t = useT();
   return (
-    <div className="min-h-screen bg-bg text-fg">
+    <div className="relative min-h-screen bg-bg text-fg">
+      <Backdrop />
       {/* Top bar */}
       <header className="glass-bar sticky top-0 z-30 border-b border-border/60">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
@@ -21,6 +24,7 @@ export default function DemoPage() {
             <span className="font-semibold">TaskFlow</span>
           </Link>
           <div className="flex items-center gap-2">
+            <ThemeSwitcher />
             <LanguageSwitcher />
             <Link
               href="/login"
@@ -53,7 +57,7 @@ export default function DemoPage() {
       </div>
 
       {/* Board */}
-      <main className="mx-auto max-w-7xl px-4 py-6">
+      <main className="relative z-10 mx-auto max-w-7xl px-4 py-6">
         <div className="mb-4 flex items-center gap-3">
           <span className="h-5 w-1.5 rounded-full bg-accent" />
           <div>

@@ -8,7 +8,6 @@ import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
 import {
   Dialog,
-  DialogBody,
   DialogFooter,
   DialogHeader,
 } from "@/components/ui/dialog";
@@ -135,7 +134,7 @@ export function TaskDialog({
   const pending = createTask.isPending || updateTask.isPending;
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} className="max-w-2xl">
       <DialogHeader title={isEdit ? t("task.edit") : t("task.new")} onClose={onClose}>
         {isEdit && (
           <button
@@ -149,15 +148,16 @@ export function TaskDialog({
         )}
       </DialogHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <DialogBody>
-          <div className="space-y-4">
+        <div className="grid md:grid-cols-[1fr_240px]">
+          {/* Main column: title + description */}
+          <div className="space-y-4 p-5">
             <div>
               <Label htmlFor="title">{t("task.title")}</Label>
               <Input
                 id="title"
                 autoFocus
                 placeholder={t("task.titlePlaceholder")}
-                className="mt-1"
+                className="mt-1 text-base font-medium"
                 {...register("title")}
               />
               <FieldError
@@ -173,35 +173,37 @@ export function TaskDialog({
               <Textarea
                 id="description"
                 placeholder={t("task.descriptionPlaceholder")}
-                className="mt-1"
+                className="mt-1 min-h-[160px]"
                 {...register("description")}
               />
             </div>
+          </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <Label htmlFor="due_date">{t("task.dueDate")}</Label>
-                <Input
-                  id="due_date"
-                  type="date"
-                  className="mt-1"
-                  {...register("due_date")}
-                />
-              </div>
-              <div>
-                <Label htmlFor="priority">{t("task.priority")}</Label>
-                <select
-                  id="priority"
-                  className="mt-1 flex h-9 w-full rounded-md border border-border bg-bg-subtle px-3 text-sm text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
-                  {...register("priority")}
-                >
-                  {PRIORITIES.map((p) => (
-                    <option key={p} value={p}>
-                      {t(`priority.${p}`)}
-                    </option>
-                  ))}
-                </select>
-              </div>
+          {/* Side column: properties */}
+          <div className="space-y-4 border-t border-border/70 bg-bg/30 p-5 md:border-s md:border-t-0">
+            <div>
+              <Label htmlFor="priority">{t("task.priority")}</Label>
+              <select
+                id="priority"
+                className="mt-1 flex h-9 w-full rounded-md border border-border bg-bg-subtle px-3 text-sm text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
+                {...register("priority")}
+              >
+                {PRIORITIES.map((p) => (
+                  <option key={p} value={p}>
+                    {t(`priority.${p}`)}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <Label htmlFor="due_date">{t("task.dueDate")}</Label>
+              <Input
+                id="due_date"
+                type="date"
+                className="mt-1"
+                {...register("due_date")}
+              />
             </div>
 
             <div>
@@ -238,7 +240,7 @@ export function TaskDialog({
               )}
             </div>
           </div>
-        </DialogBody>
+        </div>
         <DialogFooter>
           <Button type="button" variant="ghost" onClick={onClose}>
             {t("common.cancel")}

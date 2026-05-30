@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCurrentUser } from "@/hooks/use-auth";
 import { FullPageSpinner } from "@/components/ui/misc";
-import { TopBar } from "@/components/app-shell";
+import { Sidebar } from "@/components/sidebar";
 import { Backdrop } from "@/components/backdrop";
 
 /**
@@ -30,12 +30,12 @@ export default function AppLayout({
   if (!user) return <FullPageSpinner />;
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative flex h-screen overflow-hidden">
       <Backdrop />
-      <div className="relative z-10">
-        <TopBar />
+      <Sidebar />
+      <main className="relative z-10 flex min-w-0 flex-1 flex-col overflow-hidden">
         {children}
-      </div>
+      </main>
     </div>
   );
 }
