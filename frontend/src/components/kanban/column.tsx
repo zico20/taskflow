@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { SortableTaskCard } from "./task-card";
 import type { ColumnWithTasks, Task } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { useT } from "@/lib/i18n";
 
 interface KanbanColumnProps {
   column: ColumnWithTasks;
@@ -29,6 +30,7 @@ export function KanbanColumn({
   onRename,
   onDelete,
 }: KanbanColumnProps) {
+  const t = useT();
   const { setNodeRef, isOver } = useDroppable({
     id: `column-${column.id}`,
     data: { type: "column", columnId: column.id },
@@ -76,7 +78,7 @@ export function KanbanColumn({
           </div>
         ) : (
           <div className="flex items-center gap-2">
-            <h3 className="text-sm font-semibold text-fg">{column.name}</h3>
+            <h3 dir="auto" className="text-sm font-semibold text-fg">{column.name}</h3>
             <span className="rounded-full bg-bg-muted px-1.5 text-xs text-fg-subtle">
               {column.tasks.length}
             </span>
@@ -89,23 +91,23 @@ export function KanbanColumn({
               onClick={() => setMenuOpen((o) => !o)}
               onBlur={() => setTimeout(() => setMenuOpen(false), 120)}
               className="rounded p-1 text-fg-subtle hover:bg-bg-muted hover:text-fg"
-              aria-label="Column options"
+              aria-label={t("column.options")}
             >
               <MoreHorizontal size={16} />
             </button>
             {menuOpen && (
-              <div className="absolute right-0 z-20 mt-1 w-36 overflow-hidden rounded-md border border-border bg-bg-elevated py-1 shadow-xl animate-fade-in">
+              <div className="absolute end-0 z-20 mt-1 w-36 overflow-hidden rounded-md border border-border bg-bg-elevated py-1 shadow-xl animate-fade-in">
                 <button
                   onMouseDown={() => setEditing(true)}
                   className="flex w-full items-center gap-2 px-3 py-1.5 text-sm text-fg-muted hover:bg-bg-muted hover:text-fg"
                 >
-                  <Pencil size={13} /> Rename
+                  <Pencil size={13} /> {t("column.rename")}
                 </button>
                 <button
                   onMouseDown={() => onDelete(column.id)}
                   className="flex w-full items-center gap-2 px-3 py-1.5 text-sm text-danger hover:bg-danger/10"
                 >
-                  <Trash2 size={13} /> Delete
+                  <Trash2 size={13} /> {t("column.delete")}
                 </button>
               </div>
             )}
@@ -135,7 +137,7 @@ export function KanbanColumn({
 
         {column.tasks.length === 0 && (
           <p className="px-1 py-3 text-center text-xs text-fg-subtle">
-            No tasks
+            {t("column.noTasks")}
           </p>
         )}
       </div>
@@ -145,7 +147,7 @@ export function KanbanColumn({
           onClick={() => onAddTask(column.id)}
           className="mt-2 flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm text-fg-subtle transition-colors hover:bg-bg-muted hover:text-fg"
         >
-          <Plus size={15} /> Add task
+          <Plus size={15} /> {t("column.addTask")}
         </button>
       )}
     </div>

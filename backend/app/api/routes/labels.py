@@ -3,12 +3,17 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, Response, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import require_board_editor, require_board_viewer
-from app.core.errors import NotFoundError
+from app.api.deps import (
+    get_current_user,
+    require_board_editor,
+    require_board_viewer,
+)
 from app.db.session import get_db
 from app.models.board import Board
+from app.models.user import User
 from app.repositories import label_repo
 from app.schemas.label import LabelCreate, LabelPublic
+from app.services import label_service
 
 router = APIRouter(prefix="/boards/{board_id}/labels", tags=["labels"])
 
@@ -27,9 +32,10 @@ async def create_label(
     payload: LabelCreate,
     board: Board = Depends(require_board_editor),
     db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
 ) -> LabelPublic:
-    label = await label_repo.create(
-        db, board_id=board.id, name=payload.name, color=payload.color
+    label = await label_service.create_label(
+        db, board=board, actor=user, data=payload
     )
     return LabelPublic.model_validate(label)
 
@@ -43,9 +49,9 @@ async def delete_label(
     label_id: int,
     board: Board = Depends(require_board_editor),
     db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
 ) -> Response:
-    label = await label_repo.get_by_id(db, label_id)
-    if label is None or label.board_id != board.id:
-        raise NotFoundError("Label not found.", code="label_not_found")
-    await label_repo.delete(db, label)
+    await label_service.delete_label(
+        db, board=board, actor=user, label_id=label_id
+    )
     return Response(status_code=status.HTTP_204_NO_CONTENT)

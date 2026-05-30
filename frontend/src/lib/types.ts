@@ -108,4 +108,6 @@ export type WsMessage =
   | { type: "column.deleted"; data: { id: number }; actor_id: number }
   | { type: "column.reordered"; data: { column_ids: number[] }; actor_id: number }
   | { type: "board.updated"; data: Partial<BoardSummary>; actor_id: number }
+  | { type: "label.created"; data: Label; actor_id: number }
+  | { type: "label.deleted"; data: { id: number }; actor_id: number }
   | { type: "pong" };

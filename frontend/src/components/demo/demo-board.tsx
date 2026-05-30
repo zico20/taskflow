@@ -22,6 +22,7 @@ import { Plus, Trash2, X } from "lucide-react";
 import { SortableTaskCard, TaskCardContent } from "@/components/kanban/task-card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useT } from "@/lib/i18n";
 import { findColumnOfTask } from "@/lib/board-logic";
 import { demoColumns, nextDemoId } from "@/lib/demo-data";
 import type { ColumnWithTasks, Priority, Task } from "@/lib/types";
@@ -194,6 +195,7 @@ function DemoColumn({
   onAddTask: () => void;
   onDeleteTask: (taskId: number) => void;
 }) {
+  const t = useT();
   const { setNodeRef, isOver } = useDroppable({
     id: `column-${column.id}`,
     data: { type: "column", columnId: column.id },
@@ -225,7 +227,7 @@ function DemoColumn({
               <button
                 onClick={() => onDeleteTask(task.id)}
                 className="absolute end-1.5 top-1.5 rounded p-1 text-fg-subtle opacity-0 transition-opacity hover:bg-danger/15 hover:text-danger group-hover/task:opacity-100"
-                title="حذف"
+                title={t("demo.delete")}
                 aria-label="Delete task"
               >
                 <Trash2 size={13} />
@@ -236,7 +238,7 @@ function DemoColumn({
 
         {column.tasks.length === 0 && !composing && (
           <p className="px-1 py-3 text-center text-xs text-fg-subtle">
-            لا توجد مهام
+            {t("demo.noTasks")}
           </p>
         )}
 
@@ -253,18 +255,18 @@ function DemoColumn({
                 }
                 if (e.key === "Escape") onCancelCompose();
               }}
-              placeholder="عنوان المهمة…"
+              placeholder={t("demo.taskPlaceholder")}
               className="w-full resize-none bg-transparent text-sm text-fg placeholder:text-fg-subtle focus:outline-none"
               rows={2}
             />
             <div className="mt-1 flex items-center gap-2">
               <Button size="sm" onClick={onAddTask}>
-                إضافة
+                {t("common.add")}
               </Button>
               <button
                 onClick={onCancelCompose}
                 className="rounded p-1 text-fg-subtle hover:text-fg"
-                aria-label="Cancel"
+                aria-label={t("common.cancel")}
               >
                 <X size={16} />
               </button>
@@ -278,7 +280,7 @@ function DemoColumn({
           onClick={onStartCompose}
           className="mt-2 flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm text-fg-subtle transition-colors hover:bg-bg-muted hover:text-fg"
         >
-          <Plus size={15} /> إضافة مهمة
+          <Plus size={15} /> {t("demo.addTask")}
         </button>
       )}
     </div>

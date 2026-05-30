@@ -31,6 +31,8 @@ def human_action(action_type: str, user_name: str, payload: dict[str, Any]) -> s
         "board.created": f"created board '{target}'",
         "board.updated": f"updated board '{target}'",
         "member.added": f"added {payload.get('member_name', 'a member')}",
+        "label.created": f"added label '{target}'",
+        "label.deleted": f"deleted label '{target}'",
     }
     return f"{user_name} {verbs.get(action_type, action_type)}"
 

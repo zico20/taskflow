@@ -5,13 +5,14 @@ import { useQueryClient } from "@tanstack/react-query";
 import { WS_URL } from "@/lib/api";
 import type {
   ActivityEntry,
+  BoardDetail,
   BoardSnapshot,
   ColumnWithTasks,
   PresenceUser,
   Task,
   WsMessage,
 } from "@/lib/types";
-import { snapshotKey } from "./use-board";
+import { boardKey, labelsKey, snapshotKey } from "./use-board";
 
 interface UseBoardSocketResult {
   connected: boolean;
@@ -147,6 +148,24 @@ export function useBoardSocket(
               .map((id) => byId.get(id))
               .filter((c): c is ColumnWithTasks => Boolean(c));
           });
+          break;
+        case "board.updated":
+          if (isSelf) break;
+          // Live-update the board header (name/color) for other viewers.
+          qc.setQueryData<BoardDetail>(boardKey(boardId), (prev) =>
+            prev ? { ...prev, ...msg.data } : prev,
+          );
+          break;
+        case "label.created":
+          if (isSelf) break;
+          qc.invalidateQueries({ queryKey: labelsKey(boardId) });
+          break;
+        case "label.deleted":
+          if (isSelf) break;
+          // A deleted label is removed from its tasks server-side (cascade), so
+          // refetch both the label list and the snapshot to clear its chips.
+          qc.invalidateQueries({ queryKey: labelsKey(boardId) });
+          qc.invalidateQueries({ queryKey: snapshotKey(boardId) });
           break;
         default:
           break;

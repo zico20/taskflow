@@ -7,49 +7,34 @@ import {
   MousePointerClick,
   Users,
   Activity,
-  ArrowLeft,
+  ArrowRight,
   Check,
 } from "lucide-react";
+import { useT } from "@/lib/i18n";
+import { LanguageSwitcher } from "@/components/language-switcher";
+import type { MessageKey } from "@/lib/i18n";
 
-// Arabic, RTL landing page. The app itself stays in English; this page is the
-// public front door so visitors understand the product before signing up.
+// Public landing page. Direction is inherited from <html> (set server-side from
+// the locale cookie) — no hardcoded dir here.
 
-const FEATURES = [
-  {
-    icon: LayoutGrid,
-    title: "لوحات كانبان",
-    desc: "نظّم مهامك عبر أعمدة (قيد الانتظار، قيد التنفيذ، منجز) أو أنشئ أعمدتك الخاصة.",
-  },
-  {
-    icon: Zap,
-    title: "تعاون لحظي",
-    desc: "لمّا يحرّك زميلك مهمة، تشوفها تتحرك عندك فوراً — بدون أي تحديث للصفحة.",
-  },
-  {
-    icon: MousePointerClick,
-    title: "سحب وإفلات",
-    desc: "حرّك المهام بين الأعمدة بسلاسة، مع تحديث فوري للواجهة قبل ما يوصل للخادم.",
-  },
-  {
-    icon: Users,
-    title: "حضور مباشر",
-    desc: "شوف صور الأعضاء الموجودين على اللوحة الآن، واعرف منو يشتغل وياك.",
-  },
-  {
-    icon: Activity,
-    title: "سجل النشاط",
-    desc: "تابع كل حركة: منو أنشأ مهمة، منو نقلها، ومتى — في لوحة جانبية واضحة.",
-  },
-  {
-    icon: Check,
-    title: "أولويات وتصنيفات",
-    desc: "حدّد أولوية كل مهمة (منخفضة/متوسطة/عالية)، أضف تواريخ استحقاق وتصنيفات ملوّنة.",
-  },
+const FEATURES: {
+  icon: typeof LayoutGrid;
+  titleKey: MessageKey;
+  descKey: MessageKey;
+}[] = [
+  { icon: LayoutGrid, titleKey: "landing.feature.kanban.title", descKey: "landing.feature.kanban.desc" },
+  { icon: Zap, titleKey: "landing.feature.realtime.title", descKey: "landing.feature.realtime.desc" },
+  { icon: MousePointerClick, titleKey: "landing.feature.dnd.title", descKey: "landing.feature.dnd.desc" },
+  { icon: Users, titleKey: "landing.feature.presence.title", descKey: "landing.feature.presence.desc" },
+  { icon: Activity, titleKey: "landing.feature.activity.title", descKey: "landing.feature.activity.desc" },
+  { icon: Check, titleKey: "landing.feature.priorities.title", descKey: "landing.feature.priorities.desc" },
 ];
 
 export function LandingPage() {
+  const t = useT();
+
   return (
-    <div dir="rtl" className="min-h-screen bg-bg text-fg">
+    <div className="min-h-screen bg-bg text-fg">
       {/* Nav */}
       <header className="sticky top-0 z-30 border-b border-border bg-bg/80 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
@@ -57,20 +42,21 @@ export function LandingPage() {
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-bg">
               <LayoutGrid size={18} />
             </span>
-            <span className="text-lg font-semibold">TaskFlow</span>
+            <span className="text-lg font-semibold">{t("common.appName")}</span>
           </div>
           <nav className="flex items-center gap-2">
+            <LanguageSwitcher />
             <Link
               href="/login"
               className="rounded-md px-4 py-2 text-sm font-medium text-fg-muted transition-colors hover:bg-bg-muted hover:text-fg"
             >
-              تسجيل الدخول
+              {t("landing.nav.login")}
             </Link>
             <Link
               href="/signup"
               className="rounded-md bg-accent px-4 py-2 text-sm font-semibold text-bg transition-colors hover:bg-accent-hover"
             >
-              ابدأ مجاناً
+              {t("landing.nav.start")}
             </Link>
           </nav>
         </div>
@@ -81,18 +67,15 @@ export function LandingPage() {
         <div className="animate-fade-in">
           <span className="inline-flex items-center gap-2 rounded-full border border-border bg-bg-subtle px-3 py-1 text-xs text-fg-muted">
             <span className="h-1.5 w-1.5 rounded-full bg-success" />
-            تعاون لحظي بين الفريق
+            {t("landing.hero.badge")}
           </span>
           <h1 className="mx-auto mt-6 max-w-3xl text-4xl font-bold leading-tight sm:text-5xl">
-            نظّم مهام فريقك في
-            <span className="text-accent"> لوحة واحدة</span>
+            {t("landing.hero.title")}
             <br />
-            وشوف التحديثات تصير{" "}
-            <span className="text-accent">لحظياً</span>
+            <span className="text-accent">{t("landing.hero.titleAccent")}</span>
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-lg text-fg-muted">
-            لوحة مهام تعاونية بأسلوب كانبان — اسحب المهام، تابع التقدّم، وتعاون مع
-            فريقك في الوقت الفعلي.
+            {t("landing.hero.subtitle")}
           </p>
 
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -100,22 +83,20 @@ export function LandingPage() {
               href="/demo"
               className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-accent px-6 py-3 font-semibold text-bg transition-colors hover:bg-accent-hover sm:w-auto"
             >
-              جرّب بدون تسجيل
-              <ArrowLeft size={18} />
+              {t("landing.hero.tryDemo")}
+              <ArrowRight size={18} className="rtl:rotate-180" />
             </Link>
             <Link
               href="/signup"
               className="inline-flex w-full items-center justify-center rounded-md border border-border bg-bg-subtle px-6 py-3 font-medium text-fg transition-colors hover:bg-bg-muted sm:w-auto"
             >
-              إنشاء حساب مجاني
+              {t("landing.hero.createAccount")}
             </Link>
           </div>
-          <p className="mt-3 text-xs text-fg-subtle">
-            التجربة لا تحتاج بريد إلكتروني ولا بطاقة — جرّب فوراً.
-          </p>
+          <p className="mt-3 text-xs text-fg-subtle">{t("landing.hero.noCard")}</p>
         </div>
 
-        {/* App preview mockup */}
+        {/* App preview mockup (stays LTR — English column names) */}
         <div className="mx-auto mt-16 max-w-4xl animate-fade-in">
           <BoardPreview />
         </div>
@@ -125,23 +106,23 @@ export function LandingPage() {
       <section className="border-t border-border bg-bg-subtle/30 py-16">
         <div className="mx-auto max-w-6xl px-4">
           <h2 className="text-center text-2xl font-bold sm:text-3xl">
-            كل اللي تحتاجه لإدارة مهامك
+            {t("landing.features.heading")}
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-center text-fg-muted">
-            أدوات بسيطة وسريعة، مصمّمة لتركّز على الشغل مو على الأداة.
+            {t("landing.features.subheading")}
           </p>
           <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {FEATURES.map((f) => (
               <div
-                key={f.title}
+                key={f.titleKey}
                 className="rounded-lg border border-border bg-bg-subtle p-6 transition-colors hover:border-accent/40"
               >
                 <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-accent/15 text-accent">
                   <f.icon size={20} />
                 </div>
-                <h3 className="font-semibold">{f.title}</h3>
+                <h3 className="font-semibold">{t(f.titleKey)}</h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-fg-muted">
-                  {f.desc}
+                  {t(f.descKey)}
                 </p>
               </div>
             ))}
@@ -152,23 +133,21 @@ export function LandingPage() {
       {/* CTA */}
       <section className="py-20">
         <div className="mx-auto max-w-2xl px-4 text-center">
-          <h2 className="text-2xl font-bold sm:text-3xl">جاهز تبدأ؟</h2>
-          <p className="mt-3 text-fg-muted">
-            جرّب اللوحة التجريبية الآن، أو أنشئ حسابك المجاني واحفظ شغلك للأبد.
-          </p>
+          <h2 className="text-2xl font-bold sm:text-3xl">{t("landing.cta.heading")}</h2>
+          <p className="mt-3 text-fg-muted">{t("landing.cta.subtitle")}</p>
           <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               href="/demo"
               className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-accent px-6 py-3 font-semibold text-bg transition-colors hover:bg-accent-hover sm:w-auto"
             >
-              جرّب اللوحة التجريبية
-              <ArrowLeft size={18} />
+              {t("landing.cta.tryDemo")}
+              <ArrowRight size={18} className="rtl:rotate-180" />
             </Link>
             <Link
               href="/signup"
               className="inline-flex w-full items-center justify-center rounded-md border border-border bg-bg-subtle px-6 py-3 font-medium text-fg transition-colors hover:bg-bg-muted sm:w-auto"
             >
-              إنشاء حساب
+              {t("landing.cta.createAccount")}
             </Link>
           </div>
         </div>
@@ -176,15 +155,14 @@ export function LandingPage() {
 
       <footer className="border-t border-border py-8">
         <div className="mx-auto max-w-6xl px-4 text-center text-sm text-fg-subtle">
-          TaskFlow — لوحة مهام تعاونية لحظية.
+          {t("landing.footer")}
         </div>
       </footer>
     </div>
   );
 }
 
-// A static, decorative preview of the kanban board (LTR inside, since the app
-// is English) so visitors see what they're getting.
+// Static, decorative preview of the kanban board. Always LTR (English content).
 function BoardPreview() {
   const cols = [
     {

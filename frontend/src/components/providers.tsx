@@ -3,8 +3,16 @@
 import * as React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
+import { LocaleProvider } from "@/lib/i18n";
+import type { Locale } from "@/lib/i18n";
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({
+  children,
+  initialLocale,
+}: {
+  children: React.ReactNode;
+  initialLocale: Locale;
+}) {
   const [queryClient] = React.useState(
     () =>
       new QueryClient({
@@ -20,7 +28,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
+      <LocaleProvider initialLocale={initialLocale}>{children}</LocaleProvider>
       <Toaster
         theme="dark"
         position="bottom-right"

@@ -9,6 +9,8 @@ import {
   ListTodo,
   Plus,
   Search,
+  Settings,
+  Tags,
   PanelRightClose,
   PanelRightOpen,
 } from "lucide-react";
@@ -20,6 +22,8 @@ import { TaskDialog } from "@/components/kanban/task-dialog";
 import { AddColumnDialog } from "@/components/kanban/add-column-dialog";
 import { ActivityFeed } from "@/components/kanban/activity-feed";
 import { PresenceBar } from "@/components/kanban/presence-bar";
+import { BoardSettingsDialog } from "@/components/boards/board-settings-dialog";
+import { ManageLabelsDialog } from "@/components/kanban/manage-labels-dialog";
 import {
   useBoardDetail,
   useBoardSnapshot,
@@ -30,9 +34,11 @@ import { useCurrentUser } from "@/hooks/use-auth";
 import { useKeyboardShortcuts } from "@/hooks/use-keyboard-shortcuts";
 import { activityApi } from "@/lib/endpoints";
 import { useUiStore } from "@/stores/ui-store";
+import { useT } from "@/lib/i18n";
 import type { ColumnWithTasks, Task } from "@/lib/types";
 
 export default function BoardPage() {
+  const t = useT();
   const params = useParams<{ boardId: string }>();
   const boardId = Number(params.boardId);
 
@@ -54,6 +60,7 @@ export default function BoardPage() {
   );
 
   const canEdit = board?.role === "owner" || board?.role === "editor";
+  const isOwner = board?.role === "owner";
 
   // Client UI state (Zustand) — activity panel visibility, persisted locally.
   const activityPanelOpen = useUiStore((s) => s.activityPanelOpen);
@@ -66,6 +73,8 @@ export default function BoardPage() {
     task?: Task | null;
   } | null>(null);
   const [addColumnOpen, setAddColumnOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [labelsOpen, setLabelsOpen] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
 
   useKeyboardShortcuts({
@@ -98,11 +107,11 @@ export default function BoardPage() {
       <main className="mx-auto max-w-2xl px-4 py-20">
         <EmptyState
           icon={<ListTodo size={22} />}
-          title="Board not found"
-          description="This board doesn't exist or you don't have access to it."
+          title={t("board.notFound.title")}
+          description={t("board.notFound.desc")}
           action={
             <Link href="/boards">
-              <Button variant="secondary">Back to boards</Button>
+              <Button variant="secondary">{t("board.notFound.back")}</Button>
             </Link>
           }
         />
@@ -121,16 +130,20 @@ export default function BoardPage() {
             href="/boards"
             className="rounded-md p-1.5 text-fg-subtle hover:bg-bg-muted hover:text-fg"
           >
-            <ArrowLeft size={18} />
+            <ArrowLeft size={18} className="rtl:rotate-180" />
           </Link>
           <span
             className="h-5 w-1.5 rounded-full"
             style={{ backgroundColor: board.color }}
           />
           <div>
-            <h1 className="text-lg font-semibold text-fg">{board.name}</h1>
+            <h1 dir="auto" className="text-lg font-semibold text-fg">
+              {board.name}
+            </h1>
             {board.description && (
-              <p className="text-xs text-fg-subtle">{board.description}</p>
+              <p dir="auto" className="text-xs text-fg-subtle">
+                {board.description}
+              </p>
             )}
           </div>
         </div>
@@ -139,22 +152,46 @@ export default function BoardPage() {
           <div className="relative">
             <Search
               size={14}
-              className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-fg-subtle"
+              className="pointer-events-none absolute start-2.5 top-1/2 -translate-y-1/2 text-fg-subtle"
             />
             <Input
               ref={searchRef}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search tasks… ( / )"
-              className="h-9 w-44 pl-8"
+              placeholder={t("board.search")}
+              className="h-9 w-44 ps-8"
             />
           </div>
           <PresenceBar viewers={viewers} connected={connected} />
+          {canEdit && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setLabelsOpen(true)}
+              title={t("labels.title")}
+            >
+              <Tags size={16} />
+            </Button>
+          )}
+          {isOwner && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setSettingsOpen(true)}
+              title={t("board.settings")}
+            >
+              <Settings size={16} />
+            </Button>
+          )}
           <Button
             variant="ghost"
             size="icon"
             onClick={toggleActivityPanel}
-            title={activityPanelOpen ? "Hide activity" : "Show activity"}
+            title={
+              activityPanelOpen
+                ? t("board.activity.toggleHide")
+                : t("board.activity.toggleShow")
+            }
             className="hidden lg:inline-flex"
           >
             {activityPanelOpen ? (
@@ -172,12 +209,12 @@ export default function BoardPage() {
           {!hasColumns ? (
             <EmptyState
               icon={<ListTodo size={22} />}
-              title="No columns yet"
-              description="Add a column to start tracking tasks."
+              title={t("board.empty.title")}
+              description={t("board.empty.desc")}
               action={
                 canEdit && (
                   <Button onClick={() => setAddColumnOpen(true)}>
-                    <Plus size={16} /> Add column
+                    <Plus size={16} /> {t("board.addColumn")}
                   </Button>
                 )
               }
@@ -218,6 +255,20 @@ export default function BoardPage() {
         open={addColumnOpen}
         onClose={() => setAddColumnOpen(false)}
       />
+      {isOwner && (
+        <BoardSettingsDialog
+          board={board}
+          open={settingsOpen}
+          onClose={() => setSettingsOpen(false)}
+        />
+      )}
+      {canEdit && (
+        <ManageLabelsDialog
+          boardId={boardId}
+          open={labelsOpen}
+          onClose={() => setLabelsOpen(false)}
+        />
+      )}
     </div>
   );
 }

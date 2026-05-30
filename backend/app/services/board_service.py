@@ -67,3 +67,38 @@ async def add_member(
     await board_repo.add_member(db, board_id=board.id, user_id=user.id, role=role)
     await db.flush()
     return user, role
+
+
+async def change_member_role(
+    db: AsyncSession, *, board: Board, user_id: int, role: BoardRole
+) -> tuple[User, BoardRole]:
+    if role == BoardRole.owner:
+        raise ForbiddenError("Cannot assign the owner role.", code="invalid_role")
+    member = await board_repo.get_member(db, board_id=board.id, user_id=user_id)
+    if member is None:
+        raise NotFoundError(
+            "User is not a member of this board.", code="member_not_found"
+        )
+    if member.role == BoardRole.owner:
+        raise ForbiddenError(
+            "The board owner's role cannot be changed.", code="owner_protected"
+        )
+    updated = await board_repo.update_member_role(db, member=member, role=role)
+    return updated.user, updated.role
+
+
+async def remove_member(
+    db: AsyncSession, *, board: Board, user_id: int
+) -> User:
+    member = await board_repo.get_member(db, board_id=board.id, user_id=user_id)
+    if member is None:
+        raise NotFoundError(
+            "User is not a member of this board.", code="member_not_found"
+        )
+    if member.role == BoardRole.owner:
+        raise ForbiddenError(
+            "The board owner cannot be removed.", code="owner_protected"
+        )
+    removed_user = member.user
+    await board_repo.remove_member(db, member=member)
+    return removed_user

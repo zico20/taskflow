@@ -19,6 +19,7 @@ from app.schemas.board import (
     BoardMemberPublic,
     BoardSummary,
     BoardUpdate,
+    MemberRoleUpdate,
 )
 from app.services import board_service
 from app.services.realtime import record_and_broadcast
@@ -135,3 +136,50 @@ async def add_member(
         payload={"member_name": member_user.name},
     )
     return BoardMemberPublic(user=member_user, role=role)
+
+
+@router.patch(
+    "/{board_id}/members/{user_id}", response_model=BoardMemberPublic
+)
+async def update_member_role(
+    user_id: int,
+    payload: MemberRoleUpdate,
+    board: Board = Depends(require_board_owner),
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> BoardMemberPublic:
+    member_user, role = await board_service.change_member_role(
+        db, board=board, user_id=user_id, role=payload.role
+    )
+    await record_and_broadcast(
+        db,
+        board_id=board.id,
+        actor=user,
+        action_type="member.role_changed",
+        payload={"member_name": member_user.name, "role": role.value},
+    )
+    return BoardMemberPublic(user=member_user, role=role)
+
+
+@router.delete(
+    "/{board_id}/members/{user_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    response_class=Response,
+)
+async def remove_member(
+    user_id: int,
+    board: Board = Depends(require_board_owner),
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> Response:
+    removed_user = await board_service.remove_member(
+        db, board=board, user_id=user_id
+    )
+    await record_and_broadcast(
+        db,
+        board_id=board.id,
+        actor=user,
+        action_type="member.removed",
+        payload={"member_name": removed_user.name},
+    )
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
