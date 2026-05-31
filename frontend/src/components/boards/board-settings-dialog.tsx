@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Textarea } from "@/components/ui/input";
-import { Avatar, Spinner } from "@/components/ui/misc";
+import { Avatar } from "@/components/ui/misc";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { cn } from "@/lib/utils";
 import { useT } from "@/lib/i18n";
@@ -156,8 +156,11 @@ function DetailsTab({
         <Button variant="ghost" onClick={onClose}>
           {t("common.cancel")}
         </Button>
-        <Button onClick={save} disabled={update.isPending || !name.trim()}>
-          {update.isPending && <Spinner />}
+        <Button
+          onClick={save}
+          loading={update.isPending}
+          disabled={!name.trim()}
+        >
           {t("settings.details.save")}
         </Button>
       </DialogFooter>
@@ -219,8 +222,12 @@ function MembersTab({ board }: { board: BoardDetail }) {
             <option value="editor">{t("boards.role.editor")}</option>
             <option value="viewer">{t("boards.role.viewer")}</option>
           </select>
-          <Button type="submit" disabled={invite.isPending || !email.trim()}>
-            {invite.isPending ? <Spinner /> : <UserPlus size={15} />}
+          <Button
+            type="submit"
+            loading={invite.isPending}
+            disabled={!email.trim()}
+          >
+            {!invite.isPending && <UserPlus size={15} />}
             {t("settings.members.invite")}
           </Button>
         </div>

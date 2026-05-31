@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/misc";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { useDeleteBoard } from "@/hooks/use-boards";
 import { useLocale, useT, useTCount, dateFnsLocale } from "@/lib/i18n";
+import { staggerStyle } from "@/lib/stagger";
 import type { BoardSummary, BoardRole } from "@/lib/types";
 
 const ROLE_KEY: Record<BoardRole, "boards.role.owner" | "boards.role.editor" | "boards.role.viewer"> = {
@@ -17,7 +18,13 @@ const ROLE_KEY: Record<BoardRole, "boards.role.owner" | "boards.role.editor" | "
   viewer: "boards.role.viewer",
 };
 
-export function BoardCard({ board }: { board: BoardSummary }) {
+export function BoardCard({
+  board,
+  index = 0,
+}: {
+  board: BoardSummary;
+  index?: number;
+}) {
   const t = useT();
   const tc = useTCount();
   const { locale } = useLocale();
@@ -39,6 +46,7 @@ export function BoardCard({ board }: { board: BoardSummary }) {
     <>
       <Link
         href={`/boards/${board.id}`}
+        style={staggerStyle(index)}
         className="group relative block overflow-hidden rounded-xl border border-border bg-bg-subtle p-5 shadow-glass-sm transition-all hover:-translate-y-0.5 hover:border-accent/50 animate-fade-in"
       >
         <span

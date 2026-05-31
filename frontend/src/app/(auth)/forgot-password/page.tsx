@@ -8,7 +8,6 @@ import { z } from "zod";
 import { ArrowLeft, MailCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FieldError, Input, Label } from "@/components/ui/input";
-import { Spinner } from "@/components/ui/misc";
 import { useT } from "@/lib/i18n";
 
 const schema = z.object({
@@ -99,8 +98,7 @@ export default function ForgotPasswordPage() {
             message={errors.email?.message ? t(errors.email.message) : undefined}
           />
         </div>
-        <Button type="submit" className="w-full" disabled={pending}>
-          {pending && <Spinner />}
+        <Button type="submit" className="w-full" loading={pending}>
           {t("auth.forgot.submit")}
         </Button>
       </form>

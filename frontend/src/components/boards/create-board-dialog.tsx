@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { FieldError, Input, Label, Textarea } from "@/components/ui/input";
-import { Spinner } from "@/components/ui/misc";
 import { cn } from "@/lib/utils";
 import { useCreateBoard } from "@/hooks/use-boards";
 import { useT } from "@/lib/i18n";
@@ -121,8 +120,7 @@ export function CreateBoardDialog({
           <Button type="button" variant="ghost" onClick={close}>
             {t("common.cancel")}
           </Button>
-          <Button type="submit" disabled={createBoard.isPending}>
-            {createBoard.isPending && <Spinner />}
+          <Button type="submit" loading={createBoard.isPending}>
             {t("createBoard.submit")}
           </Button>
         </DialogFooter>

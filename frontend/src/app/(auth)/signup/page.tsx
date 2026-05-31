@@ -7,7 +7,6 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { FieldError, Input, Label } from "@/components/ui/input";
-import { Spinner } from "@/components/ui/misc";
 import { useSignup } from "@/hooks/use-auth";
 import { ApiRequestError } from "@/lib/api";
 import { useT } from "@/lib/i18n";
@@ -82,8 +81,7 @@ export default function SignupPage() {
             message={errors.password?.message ? t(errors.password.message) : undefined}
           />
         </div>
-        <Button type="submit" className="w-full" disabled={signup.isPending}>
-          {signup.isPending && <Spinner />}
+        <Button type="submit" className="w-full" loading={signup.isPending}>
           {t("auth.signup.submit")}
         </Button>
       </form>

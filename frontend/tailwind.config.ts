@@ -74,10 +74,21 @@ const config: Config = {
           from: { opacity: "0", transform: "scale(0.97)" },
           to: { opacity: "1", transform: "scale(1)" },
         },
+        // Exit counterparts (used by the close transition).
+        "fade-out": {
+          from: { opacity: "1", transform: "translateY(0)" },
+          to: { opacity: "0", transform: "translateY(4px)" },
+        },
+        "scale-out": {
+          from: { opacity: "1", transform: "scale(1)" },
+          to: { opacity: "0", transform: "scale(0.97)" },
+        },
       },
       animation: {
         "fade-in": "fade-in 0.18s ease-out",
         "scale-in": "scale-in 0.14s ease-out",
+        "fade-out": "fade-out 0.16s ease-in forwards",
+        "scale-out": "scale-out 0.16s ease-in forwards",
       },
     },
   },

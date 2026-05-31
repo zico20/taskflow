@@ -6,7 +6,8 @@ import { formatDistanceToNow } from "date-fns";
 import { Send, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/input";
-import { Avatar, Spinner } from "@/components/ui/misc";
+import { Avatar } from "@/components/ui/misc";
+import { ThreadSkeleton } from "@/components/skeletons/thread-skeleton";
 import { useT, useLocale, dateFnsLocale } from "@/lib/i18n";
 import { useComments, useCommentMutations } from "@/hooks/use-comments";
 
@@ -45,9 +46,7 @@ export function CommentsThread({
       <h3 className="text-[13px] font-semibold text-fg">{t("comments.title")}</h3>
 
       {isLoading ? (
-        <div className="py-2">
-          <Spinner className="text-accent" />
-        </div>
+        <ThreadSkeleton rows={2} variant="comments" />
       ) : comments.length === 0 ? (
         <p className="text-xs text-fg-subtle">{t("comments.empty")}</p>
       ) : (
@@ -119,9 +118,10 @@ export function CommentsThread({
               type="button"
               size="sm"
               onClick={submit}
-              disabled={add.isPending || !draft.trim()}
+              loading={add.isPending}
+              disabled={!draft.trim()}
             >
-              {add.isPending ? <Spinner /> : <Send size={14} />}
+              {!add.isPending && <Send size={14} />}
               {t("comments.post")}
             </Button>
           </div>

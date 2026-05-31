@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { EmptyState, FullPageSpinner } from "@/components/ui/misc";
 import { KanbanBoard } from "@/components/kanban/kanban-board";
+import { BoardSnapshotSkeleton } from "@/components/skeletons/board-snapshot-skeleton";
 import { BoardFilterBar } from "@/components/kanban/board-filter-bar";
 import { TaskDialog } from "@/components/kanban/task-dialog";
 import { AddColumnDialog } from "@/components/kanban/add-column-dialog";
@@ -35,7 +36,7 @@ import { useKeyboardShortcuts } from "@/hooks/use-keyboard-shortcuts";
 import { activityApi } from "@/lib/endpoints";
 import { useUiStore } from "@/stores/ui-store";
 import { useBoardViewStore } from "@/stores/board-view-store";
-import { applyView, EMPTY_VIEW } from "@/lib/task-filter-sort";
+import { applyView, EMPTY_VIEW, isViewActive } from "@/lib/task-filter-sort";
 import { useT } from "@/lib/i18n";
 import type { ColumnWithTasks, Task } from "@/lib/types";
 
@@ -97,7 +98,9 @@ export default function BoardPage() {
     return applyView(snapshot.columns, view, search);
   }, [snapshot, search, view]);
 
-  if (boardLoading || snapLoading) return <FullPageSpinner />;
+  // Wait only for the board identity (role/name) before showing the chrome; the
+  // snapshot's own loading is shown as a content-shaped skeleton in the surface.
+  if (boardLoading) return <FullPageSpinner />;
 
   if (isError || !board) {
     return (
@@ -117,6 +120,14 @@ export default function BoardPage() {
   }
 
   const hasColumns = (snapshot?.columns.length ?? 0) > 0;
+  // Filters/search active but nothing matches anywhere → show a board-level
+  // empty state instead of a wall of empty columns.
+  const filtersActive = isViewActive(view) || search.trim().length > 0;
+  const matchedCount = filteredColumns.reduce(
+    (sum, c) => sum + c.tasks.length,
+    0,
+  );
+  const filteredToEmpty = hasColumns && filtersActive && matchedCount === 0;
 
   return (
     <>
@@ -194,8 +205,8 @@ export default function BoardPage() {
         <PresenceBar viewers={viewers} connected={connected} />
       </div>
 
-      {/* Filter & sort bar (additive; below the toolbar). */}
-      {hasColumns && (
+      {/* Filter & sort bar (additive; below the toolbar). Hidden during load. */}
+      {!snapLoading && hasColumns && (
         <div className="flex-shrink-0 px-4 pt-3 sm:px-6">
           <BoardFilterBar boardId={boardId} labels={labels} />
         </div>
@@ -203,7 +214,9 @@ export default function BoardPage() {
 
       {/* Kanban surface (full width) */}
       <div className="min-h-0 flex-1 overflow-hidden px-4 py-4 sm:px-6 sm:py-5">
-        {!hasColumns ? (
+        {snapLoading ? (
+          <BoardSnapshotSkeleton />
+        ) : !hasColumns ? (
           <EmptyState
             icon={<ListTodo size={22} />}
             title={t("board.empty.title")}
@@ -215,6 +228,12 @@ export default function BoardPage() {
                 </Button>
               )
             }
+          />
+        ) : filteredToEmpty ? (
+          <EmptyState
+            icon={<Search size={22} />}
+            title={t("board.filterEmpty.title")}
+            description={t("board.filterEmpty.desc")}
           />
         ) : (
           <KanbanBoard

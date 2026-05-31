@@ -3,7 +3,8 @@
 import { useMemo, useState } from "react";
 import { LayoutGrid, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { EmptyState, Spinner } from "@/components/ui/misc";
+import { EmptyState } from "@/components/ui/misc";
+import { BoardsGridSkeleton } from "@/components/skeletons/board-card-skeleton";
 import { useBoards } from "@/hooks/use-boards";
 import { CreateBoardDialog } from "@/components/boards/create-board-dialog";
 import { BoardCard } from "@/components/boards/board-card";
@@ -55,9 +56,7 @@ export default function BoardsPage() {
 
       <div className="flex-1 overflow-y-auto px-4 py-5 sm:px-6 sm:py-6">
         {isLoading ? (
-          <div className="flex justify-center py-20">
-            <Spinner className="h-6 w-6 text-accent" />
-          </div>
+          <BoardsGridSkeleton />
         ) : !boards || boards.length === 0 ? (
           <EmptyState
             icon={<LayoutGrid size={22} />}
@@ -87,8 +86,8 @@ export default function BoardsPage() {
                     </span>
                   </div>
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    {items.map((board) => (
-                      <BoardCard key={board.id} board={board} />
+                    {items.map((board, i) => (
+                      <BoardCard key={board.id} board={board} index={i} />
                     ))}
                   </div>
                 </section>

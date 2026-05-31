@@ -7,7 +7,6 @@ import {
   DialogHeader,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/misc";
 
 interface ConfirmDialogProps {
   open: boolean;
@@ -46,9 +45,8 @@ export function ConfirmDialog({
         <Button
           variant={destructive ? "danger" : "primary"}
           onClick={onConfirm}
-          disabled={loading}
+          loading={loading}
         >
-          {loading && <Spinner />}
           {confirmLabel}
         </Button>
       </DialogFooter>

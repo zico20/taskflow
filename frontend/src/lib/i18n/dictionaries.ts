@@ -149,6 +149,8 @@ export const en = {
   "board.activity.toggleShow": "Show activity",
   "board.activity.toggleHide": "Hide activity",
   "board.settings": "Board settings",
+  "board.filterEmpty.title": "No matching tasks",
+  "board.filterEmpty.desc": "No tasks match your current filters or search. Try clearing them.",
 
   // --- Board settings dialog ---
   "settings.title": "Board settings",
@@ -467,6 +469,8 @@ export const ar: Dictionary = {
   "board.activity.toggleShow": "إظهار النشاط",
   "board.activity.toggleHide": "إخفاء النشاط",
   "board.settings": "إعدادات اللوحة",
+  "board.filterEmpty.title": "لا توجد مهام مطابقة",
+  "board.filterEmpty.desc": "لا توجد مهام تطابق الفلاتر أو البحث الحالي. جرّب مسحها.",
 
   // --- Board settings dialog ---
   "settings.title": "إعدادات اللوحة",

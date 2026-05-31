@@ -1,5 +1,5 @@
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan:
-`specs/007-professional-task-features/plan.md`
+`specs/008-design-ux-polish/plan.md`
 <!-- SPECKIT END -->

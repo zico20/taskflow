@@ -19,7 +19,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { Check, GripVertical, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Spinner } from "@/components/ui/misc";
+import { ThreadSkeleton } from "@/components/skeletons/thread-skeleton";
 import { cn } from "@/lib/utils";
 import { useT } from "@/lib/i18n";
 import { useChecklist, useChecklistMutations } from "@/hooks/use-checklist";
@@ -91,9 +91,7 @@ export function ChecklistSection({
       )}
 
       {isLoading ? (
-        <div className="py-2">
-          <Spinner className="text-accent" />
-        </div>
+        <ThreadSkeleton rows={3} variant="checklist" />
       ) : total === 0 ? (
         <p className="text-xs text-fg-subtle">{t("checklist.empty")}</p>
       ) : (
@@ -143,9 +141,10 @@ export function ChecklistSection({
             size="sm"
             variant="secondary"
             onClick={submitDraft}
-            disabled={add.isPending || !draft.trim()}
+            loading={add.isPending}
+            disabled={!draft.trim()}
           >
-            {add.isPending ? <Spinner /> : <Plus size={14} />}
+            {!add.isPending && <Plus size={14} />}
             {t("checklist.add")}
           </Button>
         </div>

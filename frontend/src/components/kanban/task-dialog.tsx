@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { FieldError, Input, Label, Textarea } from "@/components/ui/input";
-import { Spinner } from "@/components/ui/misc";
 import { cn } from "@/lib/utils";
 import { useT } from "@/lib/i18n";
 import type { Label as LabelType, Priority, Task } from "@/lib/types";
@@ -273,8 +272,7 @@ export function TaskDialog({
           <Button type="button" variant="ghost" onClick={onClose}>
             {t("common.cancel")}
           </Button>
-          <Button type="submit" disabled={pending}>
-            {pending && <Spinner />}
+          <Button type="submit" loading={pending}>
             {isEdit ? t("common.save") : t("task.create")}
           </Button>
         </DialogFooter>

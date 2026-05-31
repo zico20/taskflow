@@ -7,7 +7,6 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { FieldError, Input, Label } from "@/components/ui/input";
-import { Spinner } from "@/components/ui/misc";
 import { useLogin } from "@/hooks/use-auth";
 import { ApiRequestError } from "@/lib/api";
 import { useT } from "@/lib/i18n";
@@ -79,8 +78,7 @@ export default function LoginPage() {
             {t("auth.login.forgot")}
           </Link>
         </div>
-        <Button type="submit" className="w-full" disabled={login.isPending}>
-          {login.isPending && <Spinner />}
+        <Button type="submit" className="w-full" loading={login.isPending}>
           {t("auth.login.submit")}
         </Button>
       </form>

@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
-import { Spinner } from "@/components/ui/misc";
 import { useT } from "@/lib/i18n";
 import { useCreateColumn } from "@/hooks/use-board";
 
@@ -59,8 +58,7 @@ export function AddColumnDialog({
         <Button variant="ghost" onClick={onClose}>
           {t("common.cancel")}
         </Button>
-        <Button onClick={submit} disabled={createColumn.isPending}>
-          {createColumn.isPending && <Spinner />}
+        <Button onClick={submit} loading={createColumn.isPending}>
           {t("common.add")}
         </Button>
       </DialogFooter>

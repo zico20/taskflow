@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { SidebarContent } from "@/components/sidebar";
+import { useExitTransition } from "@/hooks/use-exit-transition";
+import { cn } from "@/lib/utils";
 import { useT } from "@/lib/i18n";
 
 /**
@@ -19,6 +21,7 @@ import { useT } from "@/lib/i18n";
 export function MobileNav() {
   const t = useT();
   const [open, setOpen] = useState(false);
+  const { mounted, closing } = useExitTransition(open, 200);
   const closeRef = useRef<HTMLButtonElement>(null);
 
   // Lock body scroll, close on Escape, and move focus into the drawer when open.
@@ -51,11 +54,14 @@ export function MobileNav() {
         </button>
       </div>
 
-      {open && (
+      {mounted && (
         <div className="fixed inset-0 z-50">
           {/* Scrim — closes on outside tap */}
           <div
-            className="absolute inset-0 bg-black/55 backdrop-blur-sm animate-fade-in"
+            className={cn(
+              "absolute inset-0 bg-black/55 backdrop-blur-sm",
+              closing ? "animate-fade-out" : "animate-fade-in",
+            )}
             onMouseDown={() => setOpen(false)}
             aria-hidden="true"
           />
@@ -64,7 +70,12 @@ export function MobileNav() {
             role="dialog"
             aria-modal="true"
             aria-label={t("nav.boards")}
-            className="glass-frost animate-fade-in absolute inset-y-0 start-0 flex w-[min(82vw,300px)] flex-col gap-1 border-e border-border/60 p-3"
+            className={cn(
+              "glass-frost absolute inset-y-0 start-0 flex w-[min(82vw,300px)] flex-col gap-1 border-e border-border/60 p-3 transition-transform duration-200 ease-[cubic-bezier(0.22,1,0.36,1)]",
+              closing
+                ? "-translate-x-full rtl:translate-x-full"
+                : "translate-x-0 animate-fade-in",
+            )}
           >
             <div className="flex justify-end">
               <button

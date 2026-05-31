@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
-import { Spinner } from "@/components/ui/misc";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { cn } from "@/lib/utils";
 import { useT } from "@/lib/i18n";
@@ -75,8 +74,12 @@ export function ManageLabelsDialog({
                 maxLength={60}
                 className="flex-1"
               />
-              <Button type="submit" disabled={createLabel.isPending || !name.trim()}>
-                {createLabel.isPending ? <Spinner /> : <Plus size={15} />}
+              <Button
+                type="submit"
+                loading={createLabel.isPending}
+                disabled={!name.trim()}
+              >
+                {!createLabel.isPending && <Plus size={15} />}
                 {t("labels.create")}
               </Button>
             </div>

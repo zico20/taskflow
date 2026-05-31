@@ -132,6 +132,27 @@ reordered`, `label.created|deleted`, `checklist.created|updated|reordered|delete
 reorder) use `realtime.broadcast_only()` instead — they sync live but are intentionally
 **not** logged to the activity feed (only add/remove are), keeping the feed readable.
 
+## Frontend UX layer (loading, motion, empty states)
+
+Presentation polish is intentionally **CSS-first and dependency-free** (no animation
+library). The pieces:
+
+- **Skeletons** — a `Skeleton` primitive (`components/ui/skeleton.tsx`, `.skeleton`
+  shimmer in `globals.css`) composes into content-shaped placeholders
+  (`components/skeletons/*`) sized to match real content, so swapping in data causes no
+  layout shift. They replace spinners on the boards list, board snapshot, and the task
+  dialog's checklist/comments.
+- **Enter/exit animations** — `fade-in`/`scale-in` (enter) and `fade-out`/`scale-out`
+  (exit) keyframes (tailwind.config) plus a small `useExitTransition(open, ms)` hook
+  that keeps an element mounted through its close animation and is interruption-safe.
+  Used by the dialog and the mobile-nav drawer (the activity drawer already
+  transform-animates both ways). List reveals use a pure `lib/stagger.ts` delay helper.
+- **Buttons** — a single `loading` prop on `components/ui/button.tsx` renders the
+  in-button spinner and disables the button, replacing the previously hand-rolled
+  per-call-site pattern.
+- **Reduced motion / transparency** — the global `globals.css` media blocks neutralize
+  all of the above automatically; the settled desktop (≥1280px) view is unchanged.
+
 ## Scaling path: in-memory → Redis Pub/Sub
 
 v1 broadcasting is **in-process**, which is correct for a single backend instance. To
